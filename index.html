@@ -286,6 +286,25 @@
         .animate-slide-down {
             animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        /* ANIMACIÓN PREMIUM PARA MARCA DE AGUA EN EL FONDO */
+        @keyframes pulsePremium {
+            0% {
+                transform: scale(1) translateY(0px) rotate(0deg);
+                filter: blur(0.5px) drop-shadow(0 0 0px rgba(245, 158, 11, 0));
+            }
+            50% {
+                transform: scale(1.03) translateY(-6px) rotate(0.5deg);
+                filter: blur(0.2px) drop-shadow(0 12px 24px rgba(245, 158, 11, 0.08));
+            }
+            100% {
+                transform: scale(1) translateY(0px) rotate(0deg);
+                filter: blur(0.5px) drop-shadow(0 0 0px rgba(245, 158, 11, 0));
+            }
+        }
+        .animate-watermark-premium {
+            animation: pulsePremium 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
     </style>
 </head>
 <body class="bg-[#080c14] text-slate-100 min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
@@ -325,15 +344,38 @@
         <!-- CONTENEDOR UNIFICADO EN FILA SUPERIOR: CUENTA Y CONFIGURACIÓN LATERAL (DESPLIEGUE SEAMLESS ALINEADO A LA IZQUIERDA) -->
         <div class="flex justify-start w-full relative">
             
-            <!-- MARCA DE AGUA BRANDING "OSO MASTER" (SE MUESTRA CUANDO NO HAY OPERACIÓN ACTIVA) -->
-            <div id="watermark-placeholder" class="absolute left-[340px] right-0 top-0 bottom-0 flex flex-col items-center justify-center pointer-events-none select-none z-0 transition-opacity duration-300">
-                <!-- Oso Master Watermark Logo -->
-                <div class="text-[130px] opacity-[0.03] select-none filter blur-[0.5px] leading-none mb-1">🐻</div>
-                <div class="text-3xl font-extrabold tracking-[0.15em] text-[#f59e0b] opacity-10 uppercase select-none font-mono">
-                    Comunidad Oso Master
-                </div>
-                <div class="text-[9px] font-bold tracking-[0.3em] text-slate-500/20 uppercase select-none mt-2.5">
-                    Risk Terminal Premium
+            <!-- MARCA DE AGUA BRANDING "OSO MASTER" CON VELAS JAPONESAS ANIMADAS INTEGRADAS -->
+            <div id="watermark-placeholder" class="absolute left-[340px] right-0 top-0 bottom-0 flex items-center justify-center pointer-events-none select-none z-0 transition-opacity duration-300">
+                <div class="animate-watermark-premium flex items-center justify-center space-x-12">
+                    
+                    <!-- Vela Alcista Izquierda -->
+                    <div class="flex flex-col items-center opacity-[0.06]">
+                        <div class="w-[3px] h-12 bg-emerald-500"></div>
+                        <div class="w-9 h-28 bg-emerald-500 rounded-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]"></div>
+                        <div class="w-[3px] h-16 bg-emerald-500"></div>
+                    </div>
+
+                    <!-- Núcleo de la Marca de Agua (Oso + Texto) -->
+                    <div class="flex flex-col items-center justify-center text-center">
+                        <!-- Logo Oso con opacidad mejorada -->
+                        <div class="text-[140px] opacity-[0.12] select-none leading-none mb-3">🐻</div>
+                        <!-- Nombre de la comunidad optimizado en visibilidad -->
+                        <div class="text-3xl font-extrabold tracking-[0.18em] text-[#f59e0b] opacity-25 uppercase select-none font-mono drop-shadow-[0_4px_12px_rgba(245,158,11,0.1)]">
+                            Comunidad Oso Master
+                        </div>
+                        <!-- Subtexto descriptivo -->
+                        <div class="text-[10px] font-bold tracking-[0.35em] text-slate-400/35 uppercase select-none mt-3">
+                            Risk Terminal Premium
+                        </div>
+                    </div>
+
+                    <!-- Vela Bajista Derecha -->
+                    <div class="flex flex-col items-center opacity-[0.06]">
+                        <div class="w-[3px] h-16 bg-rose-500"></div>
+                        <div class="w-9 h-32 bg-rose-500 rounded-sm shadow-[0_0_15px_rgba(244,63,94,0.3)]"></div>
+                        <div class="w-[3px] h-10 bg-rose-500"></div>
+                    </div>
+
                 </div>
             </div>
 
@@ -390,7 +432,7 @@
                             </div>
                         </div>
 
-                        <!-- TIPO DE OPERACIÓN A REALIZAR (CON MAYOR ENFOQUE EN EL DISEÑO ORIGINAL) -->
+                        <!-- TIPO DE OPERACIÓN A REALIZAR -->
                         <div class="border-t border-slate-900/80 pt-3.5 mt-2 bg-slate-900/10 p-2.5 rounded-xl border border-amber-500/15 shadow-inner">
                             <label class="block text-[10px] font-black text-amber-500 uppercase tracking-wider mb-2 text-center">Tipo de operación a realizar</label>
                             <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-850">
@@ -404,14 +446,14 @@
                         </div>
                     </div>
 
-                    <!-- SUB-MÓDULO 2: CONFIGURACIÓN DE ESCENARIO (PESTAÑA LATERAL DESPLEGABLE) -->
+                    <!-- SUB-MÓDULO 2: CONFIGURACIÓN DE ESCENARIO -->
                     <div id="trade-details-wrapper" class="hidden w-full flex-grow p-6 bg-[#0c121e]/25 flex flex-col justify-between h-full transition-all duration-300 relative">
-                        <!-- OVERLAY DE RE-SELECCIÓN DE OPERACIÓN (Blur superpuesto al restablecer) -->
+                        <!-- OVERLAY DE RE-SELECCIÓN DE OPERACIÓN -->
                         <div id="reset-overlay" class="absolute inset-0 bg-[#080c14]/95 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center transition-all duration-300 rounded-3xl hidden">
                             <div class="space-y-5 w-full max-w-xs">
                                 <div class="text-4xl animate-bounce">🐻</div>
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider">Elige qué tipo de operación deseas realizar</h3>
+                                    <h3 class="text-sm font-extrabold text-white uppercase tracking-wider">Elige qué tipo de operation deseas realizar</h3>
                                     <p class="text-[10px] text-slate-400 mt-2 leading-relaxed font-semibold">Configura una dirección de mercado para desbloquear los parámetros del trade o cancela para volver.</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3 pt-2">
@@ -430,14 +472,11 @@
 
                         <!-- Cabecera del Escenario -->
                         <div class="scenario-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-900/60 pb-3 shrink-0 z-10">
-                            <!-- Controles de Cierre y Restablecer: en móvil van arriba, legibles y alineados a la derecha -->
                             <div class="scenario-actions-row order-1 sm:order-2 flex items-center justify-end gap-2 w-full sm:w-auto min-w-0">
-                                <!-- Botón Restablecer (Borra datos y activa overlay) -->
                                 <button type="button" onclick="resetScenario()" class="scenario-reset-btn shrink-0 text-[10px] font-black text-amber-500 hover:text-amber-400 bg-amber-500/10 px-3 py-2 rounded-lg border border-amber-500/20 transition-all inline-flex items-center justify-center gap-1.5 whitespace-nowrap" title="Restablecer todos los datos">
                                     <svg class="w-3.5 h-3.5 stroke-[2.5] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
                                     <span>Restablecer</span>
                                 </button>
-                                <!-- Cerrar y Limpiar Todo (X) -->
                                 <button type="button" onclick="closeAndWipeScenario()" class="scenario-close-btn shrink-0 text-slate-400 hover:text-rose-400 bg-slate-950/80 hover:bg-rose-950/20 p-2 rounded-lg border border-slate-800/80 transition-all inline-flex items-center justify-center" title="Cerrar y Limpiar Datos" aria-label="Cerrar y limpiar datos">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -445,7 +484,6 @@
                                 </button>
                             </div>
 
-                            <!-- Identidad del módulo: en móvil va debajo y alineada a la izquierda -->
                             <div class="scenario-title-row order-2 sm:order-1 flex items-center justify-start gap-3 w-full sm:w-auto min-w-0">
                                 <span id="details-direction-badge" class="shrink-0 px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg text-xs font-black tracking-widest uppercase border border-amber-500/10">
                                     COMPRA
@@ -454,12 +492,11 @@
                             </div>
                         </div>
 
-                        <!-- Área de Contenido: Sin scrollbars y ajustado simétricamente -->
+                        <!-- Área de Contenido -->
                         <div class="py-2.5 space-y-3 flex-grow flex flex-col justify-between">
                             
                             <!-- Fila A: Activo, Riesgo, Método de TP (3 Columnas) -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <!-- Activo -->
                                 <div>
                                     <div class="min-h-[22px] flex items-end mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Activo</label>
@@ -486,7 +523,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Riesgo -->
                                 <div>
                                     <div class="min-h-[22px] flex items-end mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Riesgo (%)</label>
@@ -497,7 +533,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Método de Proyección -->
                                 <div>
                                     <div class="min-h-[22px] flex items-end mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Definir TP por:</label>
@@ -513,23 +548,20 @@
                                 </div>
                             </div>
 
-                            <!-- Fila B: Entrada, SL, TP (Alineación de Etiquetas Perfecta) -->
+                            <!-- Fila B: Entrada, SL, TP -->
                             <div class="grid grid-cols-3 gap-3 border-t border-slate-900/40 pt-2.5">
-                                <!-- Entrada -->
                                 <div class="flex flex-col">
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Entrada</label>
                                     </div>
                                     <input type="text" id="entry-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                 </div>
-                                <!-- Stop Loss -->
                                 <div class="flex flex-col">
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Stop Loss</label>
                                     </div>
                                     <input type="text" id="stop-loss-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                 </div>
-                                <!-- Parámetro de salida -->
                                 <div class="flex flex-col">
                                     <div id="benefit-ratio-input-wrapper" class="flex flex-col w-full">
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
@@ -537,21 +569,20 @@
                                         </div>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-[10px] font-bold text-slate-500">1:</div>
-                                            <input type="text" id="risk-reward-ratio" placeholder="3.0" oninput="calculateLotSize();" class="block w-full pl-6 pr-1.5 py-2 bg-slate-950 border border-slate-850 hover:border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold transition-all text-xs focus:outline-none text-center">
+                                            <input type="text" id="risk-reward-ratio" placeholder="3.0" oninput="calculateLotSize();" class="block w-full pl-6 pr-1.5 py-2 bg-slate-950 border border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold transition-all text-xs focus:outline-none text-center">
                                         </div>
                                     </div>
                                     <div id="benefit-price-input-wrapper" class="flex flex-col w-full hidden">
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
                                             <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Precio TP</label>
                                         </div>
-                                        <input type="text" id="tp-price-input" placeholder="0.00" oninput="onTpPriceInputChange();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <input type="text" id="tp-price-input" placeholder="0.00" oninput="onTpPriceInputChange();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Fila C: Resultados Métricos y Espejos -->
                             <div class="grid grid-cols-3 gap-3">
-                                <!-- Stop Loss Calculado -->
                                 <div class="flex flex-col">
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label id="sl-label" class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">SL (Puntos)</label>
@@ -561,7 +592,6 @@
                                         <div id="sl-unit" class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-[8px] font-bold text-slate-500">PTS</div>
                                     </div>
                                 </div>
-                                <!-- Take Profit Calculado -->
                                 <div class="flex flex-col">
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label id="tp-label" class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">TP (Puntos)</label>
@@ -571,7 +601,6 @@
                                         <div id="tp-unit" class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-[8px] font-bold text-slate-500">PTS</div>
                                     </div>
                                 </div>
-                                <!-- Espejo del otro parámetro -->
                                 <div class="flex flex-col">
                                     <div id="benefit-ratio-output-wrapper" class="flex flex-col w-full">
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
@@ -590,17 +619,14 @@
 
                             <!-- Fila D: Saldos Post-Trade y Módulo Unificado de Lotes Sugeridos -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-slate-900/40 pt-3 items-stretch">
-                                <!-- Saldo si toca SL -->
                                 <div class="bg-slate-950/80 border border-rose-950/30 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
                                     <span class="text-[8px] font-bold text-rose-500/80 block uppercase mb-1 tracking-wider text-center">Saldo si toca SL</span>
                                     <span id="balance-if-loss" class="text-xs font-black text-rose-500 font-mono block text-center">$10,000.00</span>
                                 </div>
-                                <!-- Saldo si toca TP -->
                                 <div class="bg-slate-950/80 border border-emerald-950/30 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
                                     <span class="text-[8px] font-bold text-emerald-400/80 block uppercase mb-1 tracking-wider text-center">Saldo si toca TP</span>
                                     <span id="balance-if-win" class="text-xs font-black text-emerald-400 font-mono block text-center">$10,000.00</span>
                                 </div>
-                                <!-- MÓDULO UNIFICADO: LOTES SUGERIDOS -->
                                 <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 flex flex-col justify-between shadow-inner">
                                     <div class="flex justify-between items-center mb-0.5">
                                         <span class="text-[8px] font-extrabold text-amber-400 uppercase tracking-widest block">Lotes Sugeridos</span>
@@ -615,9 +641,8 @@
                                 </div>
                             </div>
 
-                            <!-- Sección Oculta de Ajuste Manual de Conversión (Drawer Absoluto para Evitar Scrollbars) -->
+                            <!-- Sección Oculta de Ajuste Manual de Conversión -->
                             <div id="exchange-rate-section" class="hidden absolute bottom-16 left-6 right-6 p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-3 shadow-2xl z-20 animate-fade-in">
-                                <!-- Botón de cerrar (X) para Garantías Manuales -->
                                 <button type="button" onclick="toggleExchangeRateSection()" class="absolute top-3 right-3 text-slate-500 hover:text-rose-400 transition-colors" title="Cerrar garantías manuales">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -639,7 +664,6 @@
 
                         <!-- Fila E: Botón de Bitácora y Tasas Desplegables -->
                         <div class="flex items-center justify-between border-t border-slate-900/40 pt-4 mt-auto shrink-0 z-10">
-                            <!-- Left: Garantías Manuales -->
                             <div>
                                 <button type="button" onclick="toggleExchangeRateSection()" class="inline-flex items-center space-x-1 text-[9px] font-black text-slate-400 hover:text-white uppercase tracking-widest transition-colors py-1.5">
                                     <span>Garantías Manuales</span>
@@ -648,7 +672,6 @@
                                     </svg>
                                 </button>
                             </div>
-                            <!-- Right: Añadir a bitácora -->
                             <div>
                                 <button type="button" onclick="executeTrade()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[10px] tracking-widest rounded-xl transition-all shadow-lg flex items-center justify-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -664,7 +687,7 @@
             </div>
         </div>
 
-        <!-- FILA DE MÉTRICAS FINANCIERAS (DESPLIEGUE DINÁMICO DEBAJO, ANCHO COMPLETO) -->
+        <!-- FILA DE MÉTRICAS FINANCIERAS -->
         <div id="metrics-card-container" class="w-full hidden opacity-0 -translate-y-8 transition-all duration-500 ease-in-out">
             <div class="glass-panel module-panel-safe rounded-3xl p-6 relative overflow-visible shadow-xl border border-slate-800">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-slate-800/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -687,10 +710,8 @@
                 <div id="metrics-card-content" class="transition-all duration-300">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                     
-                    <!-- Lado Izquierdo (Métricas principales en un Grid de 4 Columnas) -->
                     <div class="lg:col-span-8 flex flex-col justify-between space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                            <!-- Capital a Arriesgar -->
                             <div class="bg-slate-950/65 border border-slate-850 p-4 rounded-2xl flex flex-col justify-between min-h-[92px]">
                                 <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block mb-1">Capital a Arriesgar</span>
                                 <div class="flex items-center justify-between">
@@ -699,7 +720,6 @@
                                 </div>
                             </div>
 
-                            <!-- Beneficio Potencial -->
                             <div class="bg-slate-950/65 border border-slate-850 p-4 rounded-2xl flex flex-col justify-between min-h-[92px]">
                                 <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block mb-1">Beneficio Potencial</span>
                                 <div class="flex items-center justify-between">
@@ -708,7 +728,6 @@
                                 </div>
                             </div>
 
-                            <!-- Valor del Pip -->
                             <div class="bg-slate-950/65 border border-slate-850 p-4 rounded-2xl flex flex-col justify-between min-h-[92px]">
                                 <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block mb-1">Valor del Pip (Total)</span>
                                 <div class="flex items-center justify-between">
@@ -717,7 +736,6 @@
                                 </div>
                             </div>
 
-                            <!-- Margen Requerido -->
                             <div id="margin-container" class="bg-slate-950/65 border border-slate-850 p-4 rounded-2xl flex flex-col justify-between min-h-[92px] transition-colors duration-200">
                                 <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block mb-1">Margen Requerido (Garantía)</span>
                                 <div class="flex items-center justify-between">
@@ -727,7 +745,6 @@
                             </div>
                         </div>
 
-                        <!-- Tabla Comparativa de Niveles de Riesgo -->
                         <div class="border-t border-slate-900/80 pt-4">
                             <h3 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-3 text-left">Tabla de Referencia para Otros Riesgos (Lotes Estándar)</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -755,14 +772,12 @@
                         </div>
                     </div>
 
-                    <!-- Lado Derecho: Ratio Visual de Asimetría (4 Columnas) -->
                     <div class="lg:col-span-4 flex flex-col justify-between bg-slate-950/40 border border-slate-900/60 p-5 rounded-2xl relative">
                         <div class="flex items-center justify-between mb-3.5">
                             <span class="text-xs font-bold text-slate-400">Ratio Riesgo/Beneficio</span>
                             <span id="rr-badge" class="text-xs font-extrabold bg-slate-800 text-slate-400 px-3 py-1 rounded-xl">Sin TP</span>
                         </div>
 
-                        <!-- Barra de Progreso del Ratio -->
                         <div class="space-y-3.5 flex-grow flex flex-col justify-center">
                             <div class="flex justify-between text-[9px] text-slate-500 font-extrabold uppercase tracking-wide mb-1">
                                 <span>Pérdida (SL)</span>
@@ -802,7 +817,6 @@
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                        <!-- Stats rápidos -->
                         <div class="flex gap-4 flex-wrap">
                             <div class="bg-slate-950/80 border border-amber-500/20 px-4 py-2 rounded-xl text-center">
                                 <span class="text-[9px] text-slate-500 block font-bold uppercase tracking-wider">Trades Abiertos</span>
@@ -833,7 +847,6 @@
                             </tr>
                         </thead>
                         <tbody id="trades-table-body" class="divide-y divide-slate-900/60">
-                            <!-- Inserción dinámica por JS -->
                             <tr>
                                 <td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">
                                     No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".
@@ -857,7 +870,6 @@
     <!-- POPUP MODAL: DETALLES AVANZADOS DEL TRADE -->
     <div id="trade-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden transition-all duration-300">
         <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-800 scale-95 opacity-0 transition-all duration-300" id="modal-container">
-            <!-- Header Modal -->
             <div class="bg-slate-900/50 p-6 border-b border-slate-800/80 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <span id="modal-direction-icon" class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl font-bold">
@@ -873,10 +885,8 @@
                 </button>
             </div>
 
-            <!-- Body Modal -->
             <div class="p-6 space-y-6">
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Columna Izquierda Parámetros Base -->
                     <div class="space-y-3.5">
                         <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-900 shadow-inner">
                             <span class="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Lotes Estándar</span>
@@ -896,7 +906,6 @@
                         </div>
                     </div>
 
-                    <!-- Columna Derecha Métricas de Riesgo -->
                     <div class="space-y-3.5">
                         <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-900 shadow-inner">
                             <span class="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Balance Inicial</span>
@@ -917,7 +926,6 @@
                     </div>
                 </div>
 
-                <!-- Detalles Complementarios / Asimetría -->
                 <div class="bg-slate-950/50 border border-slate-900 p-4 rounded-2xl flex items-center justify-between">
                     <div>
                         <span class="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest block mb-0.5">Asimetría R:R Estimada</span>
@@ -930,7 +938,6 @@
                 </div>
             </div>
 
-            <!-- Footer Modal -->
             <div class="bg-slate-900/50 p-4 border-t border-slate-800/80 flex justify-end space-x-3">
                 <button onclick="closeModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all">
                     Cerrar Detalle
@@ -943,17 +950,11 @@
     <script>
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-fx-lot-wizard';
 
-        // Estructuras de metadatos de los activos (Pares, Commodities e Índices)
         const currencyPairs = {
-            // Commodities
             "XAU/USD": { base: "XAU", quote: "USD", isJpy: false, contractSize: 100, pipSize: 0.1 },
-            
-            // Indices
             "SP500": { base: "SPX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
             "NASDAQ": { base: "NDX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
             "US30": { base: "DJX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
-
-            // Forex Majors
             "EUR/USD": { base: "EUR", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
             "GBP/USD": { base: "GBP", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
             "USD/JPY": { base: "USD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
@@ -961,8 +962,6 @@
             "USD/CHF": { base: "USD", quote: "CHF", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
             "AUD/USD": { base: "AUD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
             "NZD/USD": { base: "NZD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            
-            // Forex Crosses
             "EUR/GBP": { base: "EUR", quote: "GBP", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
             "EUR/JPY": { base: "EUR", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
             "GBP/JPY": { base: "GBP", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
@@ -972,19 +971,11 @@
             "CHF/JPY": { base: "CHF", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 }
         };
 
-        // Tasas de cambio globales estáticas (Operación offline)
         let rates = {
-            "USD": 1.0,
-            "EUR": 0.92,
-            "GBP": 0.79,
-            "JPY": 154.5,
-            "CAD": 1.37,
-            "AUD": 1.51,
-            "CHF": 0.89,
-            "NZD": 1.63
+            "USD": 1.0, "EUR": 0.92, "GBP": 0.79, "JPY": 154.5,
+            "CAD": 1.37, "AUD": 1.51, "CHF": 0.89, "NZD": 1.63
         };
 
-        // Estado interno de la aplicación
         let state = {
             balance: 10000,
             accountCurrency: "USD",
@@ -993,24 +984,18 @@
             entryPrice: 2350.00,
             stopLossPrice: 2340.00,
             riskRewardRatio: 3.0,
-            direction: null, // null al inicio para forzar la selección (UX)
+            direction: null,
             pair: "XAU/USD",
-            benefitMethod: "ratio", // 'ratio' o 'price'
+            benefitMethod: "ratio",
             tpPriceInputVal: 2380.00,
-            trades: [] // Lista de trades en bitácora
+            trades: []
         };
 
-        // Respaldo de dirección para cancelar reset overlay de forma correcta
         let previousDirection = null;
-
-        // Timer para la animación de métricas
         let metricsTimeout = null;
-
-        // Estado visual de módulos contraíbles
         let financialMetricsCollapsed = false;
         let tradesLogCollapsed = false;
 
-        // Función purificadora para soportar comas y puntos
         function parseCleanFloat(valStr) {
             if (valStr === undefined || valStr === null) return 0;
             const clean = valStr.toString().replace(',', '.').trim();
@@ -1018,13 +1003,11 @@
             return parseFloat(clean) || 0;
         }
 
-        // INICIALIZACIÓN
         window.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
             updateCurrencySymbol();
             updateCustomRateUI();
             
-            // Cargar estado inicial y portafolio de trades de localStorage si existiera
             const savedState = localStorage.getItem('oso_master_config_v5');
             if (savedState) {
                 try {
@@ -1040,7 +1023,6 @@
                     state.benefitMethod = parsed.benefitMethod || "ratio";
                     state.tpPriceInputVal = parsed.tpPriceInputVal || 2380.00;
 
-                    // Sincronizar inputs
                     document.getElementById('account-balance').value = state.balance;
                     document.getElementById('account-currency').value = state.accountCurrency;
                     document.getElementById('account-leverage').value = state.leverage;
@@ -1061,11 +1043,9 @@
                 setInitialPricesForPair("XAU/USD");
             }
 
-            // Forzar el estado colapsado inicial en refresco
             state.direction = null; 
             collapseTradeForm();
 
-            // Cargar portafolio de trades histórico de localStorage
             const savedTrades = localStorage.getItem('oso_master_trades_v5');
             if (savedTrades) {
                 try {
@@ -1080,7 +1060,6 @@
             calculateLotSize();
         });
 
-        // Configurar los escuchas de inputs para recalcular dinámicamente
         function setupEventListeners() {
             const inputs = ['account-balance', 'entry-price', 'stop-loss-price', 'account-leverage', 'risk-percentage', 'risk-reward-ratio'];
             inputs.forEach(id => {
@@ -1103,7 +1082,6 @@
             });
         }
 
-        // GUARDADO EN MEMORIA LOCAL
         function saveStateToLocal() {
             const stateToSave = {
                 balance: state.balance,
@@ -1134,37 +1112,29 @@
             saveStateToLocal();
         }
 
-        // CONTROL DEL INTERRUPTOR DE MÉTODO DE BENEFICIO
         function setBenefitMethod(method) {
-            state.benefitMethod = method;
-            
             const btnRatio = document.getElementById('toggle-use-ratio');
             const btnPrice = document.getElementById('toggle-use-price');
-
             const ratioInputWrap = document.getElementById('benefit-ratio-input-wrapper');
             const priceInputWrap = document.getElementById('benefit-price-input-wrapper');
-
             const ratioOutputWrap = document.getElementById('benefit-ratio-output-wrapper');
             const priceOutputWrap = document.getElementById('benefit-price-output-wrapper');
 
             if (!btnRatio || !btnPrice) return;
+            state.benefitMethod = method;
 
             if (method === 'ratio') {
                 btnRatio.className = "py-1 text-[10px] font-bold rounded-md bg-amber-500 text-slate-950 shadow-sm";
                 btnPrice.className = "py-1 text-[10px] font-bold rounded-md text-slate-400 hover:text-white transition-all";
-
                 ratioInputWrap.classList.remove('hidden');
                 priceInputWrap.classList.add('hidden');
-
                 ratioOutputWrap.classList.remove('hidden');
                 priceOutputWrap.classList.add('hidden');
             } else {
                 btnPrice.className = "py-1 text-[10px] font-bold rounded-md bg-amber-500 text-slate-950 shadow-sm";
                 btnRatio.className = "py-1 text-[10px] font-bold rounded-md text-slate-400 hover:text-white transition-all";
-
                 priceInputWrap.classList.remove('hidden');
                 ratioInputWrap.classList.add('hidden');
-
                 priceOutputWrap.classList.remove('hidden');
                 ratioOutputWrap.classList.add('hidden');
             }
@@ -1173,37 +1143,22 @@
             saveStateToLocal();
         }
 
-        // Al cambiar el precio de TP de forma directa
         function onTpPriceInputChange() {
-            const val = parseCleanFloat(document.getElementById('tp-price-input').value);
-            state.tpPriceInputVal = val;
+            state.tpPriceInputVal = parseCleanFloat(document.getElementById('tp-price-input').value);
             calculateLotSize();
             saveStateToLocal();
         }
 
-        // CONTROL DE CONTRACCIÓN / EXPANSIÓN: MÉTRICAS FINANCIERAS
         function setFinancialMetricsCollapsed(collapsed) {
             financialMetricsCollapsed = collapsed;
             const content = document.getElementById('metrics-card-content');
-            const textLabels = [
-                document.getElementById('metrics-toggle-text')
-            ];
-            const chevrons = [
-                document.getElementById('metrics-toggle-chevron')
-            ];
-            const buttons = [
-                document.getElementById('metrics-toggle-btn')
-            ];
+            const textLabels = [document.getElementById('metrics-toggle-text')];
+            const chevrons = [document.getElementById('metrics-toggle-chevron')];
+            const buttons = [document.getElementById('metrics-toggle-btn')];
 
-            if (content) {
-                content.classList.toggle('hidden', collapsed);
-            }
-            textLabels.forEach(label => {
-                if (label) label.textContent = collapsed ? 'Expandir' : 'Contraer';
-            });
-            chevrons.forEach(icon => {
-                if (icon) icon.classList.toggle('-rotate-90', collapsed);
-            });
+            if (content) content.classList.toggle('hidden', collapsed);
+            textLabels.forEach(label => { if (label) label.textContent = collapsed ? 'Expandir' : 'Contraer'; });
+            chevrons.forEach(icon => { if (icon) icon.classList.toggle('-rotate-90', collapsed); });
             buttons.forEach(button => {
                 if (button) {
                     button.setAttribute('aria-expanded', (!collapsed).toString());
@@ -1216,7 +1171,6 @@
             setFinancialMetricsCollapsed(!financialMetricsCollapsed);
         }
 
-        // CONTROL DE CONTRACCIÓN / EXPANSIÓN: BITÁCORA DE TRADES
         function setTradesLogCollapsed(collapsed) {
             tradesLogCollapsed = collapsed;
             const content = document.getElementById('trades-log-content');
@@ -1224,15 +1178,9 @@
             const chevron = document.getElementById('trades-log-toggle-chevron');
             const button = document.getElementById('trades-log-toggle-btn');
 
-            if (content) {
-                content.classList.toggle('hidden', collapsed);
-            }
-            if (textLabel) {
-                textLabel.textContent = collapsed ? 'Expandir' : 'Contraer';
-            }
-            if (chevron) {
-                chevron.classList.toggle('-rotate-90', collapsed);
-            }
+            if (content) content.classList.toggle('hidden', collapsed);
+            if (textLabel) textLabel.textContent = collapsed ? 'Expandir' : 'Contraer';
+            if (chevron) chevron.classList.toggle('-rotate-90', collapsed);
             if (button) {
                 button.setAttribute('aria-expanded', (!collapsed).toString());
                 button.setAttribute('title', collapsed ? 'Expandir bitácora de trades' : 'Contraer bitácora de trades');
@@ -1243,25 +1191,16 @@
             setTradesLogCollapsed(!tradesLogCollapsed);
         }
 
-        // Restaura valores base después de Restablecer/Wipe para que el cálculo vuelva a funcionar sin refrescar.
         function restoreScenarioCoreDefaults() {
             const balanceEl = document.getElementById('account-balance');
             const leverageEl = document.getElementById('account-leverage');
             const riskEl = document.getElementById('risk-percentage');
             const ratioEl = document.getElementById('risk-reward-ratio');
 
-            if (balanceEl && balanceEl.value.trim() === '') {
-                balanceEl.value = '10000';
-            }
-            if (leverageEl && leverageEl.value === '') {
-                leverageEl.value = '100';
-            }
-            if (riskEl && riskEl.value.trim() === '') {
-                riskEl.value = '1.0';
-            }
-            if (ratioEl && ratioEl.value.trim() === '') {
-                ratioEl.value = '3.0';
-            }
+            if (balanceEl && balanceEl.value.trim() === '') balanceEl.value = '10000';
+            if (leverageEl && leverageEl.value === '') leverageEl.value = '100';
+            if (riskEl && riskEl.value.trim() === '') riskEl.value = '1.0';
+            if (ratioEl && ratioEl.value.trim() === '') ratioEl.value = '3.0';
 
             state.balance = parseCleanFloat(balanceEl ? balanceEl.value : state.balance);
             state.leverage = parseFloat(leverageEl ? leverageEl.value : state.leverage) || 100;
@@ -1269,7 +1208,6 @@
             state.riskRewardRatio = parseCleanFloat(ratioEl ? ratioEl.value : state.riskRewardRatio || 3.0);
         }
 
-        // CONFIGURACIÓN DE LA DIRECCIÓN DEL TRADE (MUESTRA EL MÓDULO AL SELECCIONAR)
         function setDirection(dir) {
             restoreScenarioCoreDefaults();
             state.direction = dir;
@@ -1284,23 +1222,14 @@
 
             if (!btnBuy || !btnSell || !detailsWrapper || !container) return;
 
-            // Ocultar overlay de restablecimiento en caso de estar activo
             if (overlay) overlay.classList.add('hidden');
-
-            // Mostrar el módulo desplegable lateral
             detailsWrapper.classList.remove('hidden');
-            
-            // Ocultar la marca de agua cuando está activo
             if (watermarkPlaceholder) watermarkPlaceholder.classList.add('opacity-0', 'pointer-events-none');
-
-            // Limpiar timeouts de métricas previas
             if (metricsTimeout) clearTimeout(metricsTimeout);
 
-            // Expandir el contenedor maestro al 100% de ancho en pantallas grandes
             container.classList.remove('max-w-[320px]');
             container.classList.add('max-w-7xl');
 
-            // Determinar si la animación es lateral (Desktop/Tablet) o vertical (Móvil)
             const isDesktop = window.innerWidth >= 1024;
             detailsWrapper.classList.remove('animate-slide-right', 'animate-slide-down');
             if (isDesktop) {
@@ -1309,14 +1238,11 @@
                 detailsWrapper.classList.add('animate-slide-down');
             }
 
-            // Aplicar el diseño exacto del overlay a los botones del módulo de cuenta
             if (dir === 'BUY') {
                 btnBuy.className = "py-2.5 text-[10px] font-black rounded-lg transition-all bg-emerald-500 hover:bg-[#059669] text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.5)] ring-2 ring-white ring-offset-2 ring-offset-[#080c14] scale-102 uppercase tracking-wider";
                 btnSell.className = "py-2.5 text-[10px] font-black rounded-lg text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:text-white hover:bg-rose-500/20 transition-all uppercase tracking-wider";
-                
                 detailsWrapper.classList.add('border-l-4', 'border-emerald-500/60');
                 detailsWrapper.classList.remove('border-rose-500/60');
-                
                 if (badge) {
                     badge.textContent = "COMPRA";
                     badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-black tracking-widest uppercase border border-emerald-500/10";
@@ -1324,18 +1250,14 @@
             } else {
                 btnSell.className = "py-2.5 text-[10px] font-black rounded-lg transition-all bg-rose-500 hover:bg-[#e11d48] text-white shadow-[0_0_15px_rgba(244,63,94,0.5)] ring-2 ring-white ring-offset-2 ring-offset-[#080c14] scale-102 uppercase tracking-wider";
                 btnBuy.className = "py-2.5 text-[10px] font-black rounded-lg text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:text-white hover:bg-emerald-500/20 transition-all uppercase tracking-wider";
-                
                 detailsWrapper.classList.add('border-l-4', 'border-rose-500/60');
                 detailsWrapper.classList.remove('border-emerald-500/60');
-                
                 if (badge) {
                     badge.textContent = "VENTA";
                     badge.className = "px-3 py-1 bg-rose-500/20 text-rose-400 rounded-lg text-xs font-black tracking-widest uppercase border border-rose-500/10";
                 }
             }
             
-            // Después de un wipe/restablecer, si ya hay activo seleccionado pero los precios están vacíos,
-            // reconstruimos precios seguros para que el cálculo de lotaje vuelva a operar sin refrescar.
             const selectedPairAfterDirection = document.getElementById('currency-pair').value;
             const entryAfterDirection = document.getElementById('entry-price').value.toString().trim();
             const slAfterDirection = document.getElementById('stop-loss-price').value.toString().trim();
@@ -1349,7 +1271,6 @@
             calculateLotSize();
             saveStateToLocal();
 
-            // Desplegar el módulo inferior de Métricas del Trade exactamente 0.5s después de la pestaña
             if (metricsContainer) {
                 setFinancialMetricsCollapsed(false);
                 metricsContainer.classList.remove('hidden');
@@ -1360,11 +1281,10 @@
             }
         }
 
-        // Colapsar el panel de Detalles de Operación
         function collapseTradeForm() {
             if (metricsTimeout) clearTimeout(metricsTimeout);
-            
             state.direction = null;
+            
             const btnBuy = document.getElementById('btn-buy');
             const btnSell = document.getElementById('btn-sell');
             const detailsWrapper = document.getElementById('trade-details-wrapper');
@@ -1376,80 +1296,59 @@
                 btnSell.className = "py-2.5 text-[10px] font-black rounded-lg text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:text-white hover:bg-rose-500/20 transition-all tracking-wider uppercase";
             }
             
-            // 1. Iniciar colapso vertical de las métricas de forma inmediata
             if (metricsContainer) {
                 metricsContainer.classList.remove('opacity-100', 'translate-y-0');
                 metricsContainer.classList.add('opacity-0', '-translate-y-8');
             }
 
-            // 2. Esperar el retroceso de la animación de métricas antes de contraer el contenedor horizontalmente
             setTimeout(() => {
                 if (metricsContainer) {
                     metricsContainer.classList.add('hidden');
                     setFinancialMetricsCollapsed(false);
                 }
-
                 if (detailsWrapper) {
                     detailsWrapper.classList.add('hidden');
                     detailsWrapper.classList.remove('border-l-4', 'border-emerald-500/60', 'border-rose-500/60', 'animate-slide-right', 'animate-slide-down');
                 }
-
-                // Contraer contenedor al ancho compacto original
                 if (container) {
                     container.classList.remove('max-w-7xl');
                     container.classList.add('max-w-[320px]');
                 }
-
-                // Mostrar nuevamente la marca de agua Oso Master en el espacio vacío
                 const watermarkPlaceholder = document.getElementById('watermark-placeholder');
                 if (watermarkPlaceholder) watermarkPlaceholder.classList.remove('opacity-0', 'pointer-events-none');
             }, 300);
 
-            // Reseteamos resultados financieros a cero de forma visual
             updateResults(0, 0, 0, 0, 0, 0, 0, 0);
         }
 
-        // CONTROL DEL DESPLIEGUE SEAMLESS CON BOTONES DE REESTABLECIMIENTO/CIERRE
         function closeAndWipeScenario() {
             wipeScenarioInputs();
             collapseTradeForm();
             showToast("Módulo de escenario cerrado y restablecido.", "warning");
         }
 
-        // Vacía completamente todos los campos editables del formulario
         function wipeScenarioInputs() {
             document.getElementById('risk-percentage').value = "";
             document.getElementById('entry-price').value = "";
             document.getElementById('stop-loss-price').value = "";
             document.getElementById('risk-reward-ratio').value = "";
             document.getElementById('tp-price-input').value = "";
-            document.getElementById('currency-pair').value = ""; // Vuelve a placeholder nulo
+            document.getElementById('currency-pair').value = "";
 
-            // Limpieza de estados internos. Los valores base se restauran automáticamente al elegir una nueva dirección.
-            state.pair = "";
-            state.riskPercent = 0;
-            state.entryPrice = 0;
-            state.stopLossPrice = 0;
-            state.riskRewardRatio = 0;
-            state.tpPriceInputVal = 0;
-            state.takeProfit = 0;
+            state.pair = ""; state.riskPercent = 0; state.entryPrice = 0;
+            state.stopLossPrice = 0; state.riskRewardRatio = 0;
+            state.tpPriceInputVal = 0; state.takeProfit = 0;
 
             updateCustomRateUI();
             calculateLotSize();
             saveStateToLocal();
         }
 
-        // Restablece el módulo limpiándolo y superponiendo la selección
         function resetScenario() {
-            // Guardar dirección actual para poder cancelar el reset de ser necesario
             previousDirection = state.direction;
-
             wipeScenarioInputs();
-            
-            // Resetear estados de dirección
             state.direction = null;
 
-            // Deseleccionar botones principales de cuenta
             const btnBuy = document.getElementById('btn-buy');
             const btnSell = document.getElementById('btn-sell');
             if (btnBuy && btnSell) {
@@ -1457,19 +1356,13 @@
                 btnSell.className = "py-2.5 text-[10px] font-black rounded-lg text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:text-white hover:bg-rose-500/20 transition-all tracking-wider uppercase";
             }
 
-            // Mostrar el Overlay con desenfoque de fondo para elegir la dirección
             const overlay = document.getElementById('reset-overlay');
-            if (overlay) {
-                overlay.classList.remove('hidden');
-            }
+            if (overlay) overlay.classList.remove('hidden');
         }
 
-        // Función avanzada de cancelación de restablecimiento
         function cancelReset() {
             const overlay = document.getElementById('reset-overlay');
-            if (overlay) {
-                overlay.classList.add('hidden');
-            }
+            if (overlay) overlay.classList.add('hidden');
             if (previousDirection) {
                 setDirection(previousDirection);
             } else {
@@ -1477,16 +1370,12 @@
             }
         }
 
-        // Gestiona la acción de los botones del overlay
         function selectDirectionFromOverlay(dir) {
             const overlay = document.getElementById('reset-overlay');
-            if (overlay) {
-                overlay.classList.add('hidden');
-            }
+            if (overlay) overlay.classList.add('hidden');
             setDirection(dir);
         }
 
-        // Ajustar el precio del SL para mantener el sentido común al cambiar BUY/SELL
         function adjustSLPriceForNewDirection() {
             const pairConfig = currencyPairs[state.pair];
             if (!pairConfig || !state.direction) return;
@@ -1505,30 +1394,16 @@
             document.getElementById('stop-loss-price').value = state.stopLossPrice;
         }
 
-        // Establecer precios de entrada y SL por defecto según el activo para inicializaciones offline seguras
         function setInitialPricesForPair(selectedPair) {
             const pairConfig = currencyPairs[selectedPair];
             if (!pairConfig) return;
             
             const baselinePrices = {
-                "XAU/USD": 2350.00,
-                "SP500": 5300.00,
-                "NASDAQ": 18500.00,
-                "US30": 39000.00,
-                "EUR/USD": 1.08500,
-                "GBP/USD": 1.26500,
-                "USD/JPY": 155.00,
-                "USD/CAD": 1.36500,
-                "USD/CHF": 0.90500,
-                "AUD/USD": 0.66500,
-                "NZD/USD": 0.61500,
-                "EUR/GBP": 0.85500,
-                "EUR/JPY": 168.00,
-                "GBP/JPY": 196.00,
-                "AUD/JPY": 103.00,
-                "EUR/CAD": 1.48000,
-                "GBP/CAD": 1.72500,
-                "CHF/JPY": 171.00
+                "XAU/USD": 2350.00, "SP500": 5300.00, "NASDAQ": 18500.00, "US30": 39000.00,
+                "EUR/USD": 1.08500, "GBP/USD": 1.26500, "USD/JPY": 155.00, "USD/CAD": 1.36500,
+                "USD/CHF": 0.90500, "AUD/USD": 0.66500, "NZD/USD": 0.61500, "EUR/GBP": 0.85500,
+                "EUR/JPY": 168.00, "GBP/JPY": 196.00, "AUD/JPY": 103.00, "EUR/CAD": 1.48000,
+                "GBP/CAD": 1.72500, "CHF/JPY": 171.00
             };
 
             const defaultPrice = baselinePrices[selectedPair] || 1.0;
@@ -1553,7 +1428,6 @@
             if (entryEl) entryEl.value = state.entryPrice;
             if (slEl) slEl.value = state.stopLossPrice;
 
-            // Configurar también un TP price sugerido para no romper la matemática al iniciar en modo precio
             state.tpPriceInputVal = effectiveDirection === 'SELL' ? (state.entryPrice - (slDistance * 3 * pipSize)) : (state.entryPrice + (slDistance * 3 * pipSize));
             state.tpPriceInputVal = parseFloat(state.tpPriceInputVal.toFixed(decimals));
             
@@ -1569,9 +1443,7 @@
             restoreScenarioCoreDefaults();
             state.pair = document.getElementById('currency-pair').value;
             if (!state.pair || !currencyPairs[state.pair]) {
-                calculateLotSize();
-                saveStateToLocal();
-                return;
+                calculateLotSize(); saveStateToLocal(); return;
             }
             setInitialPricesForPair(state.pair);
             updateCustomRateUI();
@@ -1581,10 +1453,7 @@
 
         function updateCurrencySymbol() {
             state.accountCurrency = document.getElementById('account-currency').value;
-            const symbolMap = {
-                "USD": "$", "EUR": "€", "GBP": "£", "JPY": "¥",
-                "CAD": "C$", "AUD": "A$", "CHF": "₣"
-            };
+            const symbolMap = { "USD": "$", "EUR": "€", "GBP": "£", "JPY": "¥", "CAD": "C$", "AUD": "A$", "CHF": "₣" };
             const symbol = symbolMap[state.accountCurrency] || "$";
             document.getElementById('account-currency-symbol').textContent = symbol;
             updateCustomRateUI();
@@ -1622,12 +1491,9 @@
             if (rateLabel1) rateLabel1.textContent = `Tasa del Par (${state.pair})`;
             
             let currentPairRate = 1.0;
-            const bRate = rates[pairConfig.base];
-            const qRate = rates[pairConfig.quote];
+            const bRate = rates[pairConfig.base]; const qRate = rates[pairConfig.quote];
+            if (bRate && qRate) currentPairRate = qRate / bRate;
             
-            if (bRate && qRate) {
-                currentPairRate = qRate / bRate;
-            }
             const customRateEl = document.getElementById('custom-rate-pair');
             if (customRateEl) customRateEl.value = currentPairRate.toFixed(5);
 
@@ -1637,35 +1503,25 @@
             let quoteToAccRate = 1.0;
             if (pairConfig.quote !== state.accountCurrency) {
                 const accRate = rates[state.accountCurrency];
-                if (accRate && qRate) {
-                    quoteToAccRate = accRate / qRate;
-                }
+                if (accRate && qRate) quoteToAccRate = accRate / qRate;
             }
             const customQuoteAccEl = document.getElementById('custom-rate-quote-acc');
             if (customQuoteAccEl) customQuoteAccEl.value = quoteToAccRate.toFixed(5);
         }
 
         function getCrossRate(fromCur, toCur) {
-            const fRate = rates[fromCur];
-            const tRate = rates[toCur];
-            if (fRate && tRate) {
-                return tRate / fRate;
-            }
-            return 1.0;
+            const fRate = rates[fromCur]; const tRate = rates[toCur];
+            return (fRate && tRate) ? (tRate / fRate) : 1.0;
         }
 
         function getBaseToAccountMultiplier(pairConfig, entryPrice) {
-            if (pairConfig.base === state.accountCurrency) {
-                return 1.0;
-            }
+            if (pairConfig.base === state.accountCurrency) return 1.0;
             if (["XAU", "SPX", "NDX", "DJX"].includes(pairConfig.base)) {
-                const usdToAcc = getCrossRate("USD", state.accountCurrency);
-                return entryPrice * usdToAcc;
+                return entryPrice * getCrossRate("USD", state.accountCurrency);
             }
             return getCrossRate(pairConfig.base, state.accountCurrency);
         }
 
-        // MATEMÁTICA CENTRAL: CALCULA PIPS, TAKE PROFIT, LOTES Y MARGEN EXIGIDO
         function calculateLotSize() {
             const balanceEl = document.getElementById('account-balance');
             const riskEl = document.getElementById('risk-percentage');
@@ -1687,16 +1543,13 @@
             const symbol = document.getElementById('account-currency-symbol').textContent || "$";
             const formattedCurrentBalance = `${symbol}${balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-            // Si los datos están incompletos, reseteamos las métricas dinámicas suavemente sin romper la interfaz
             if (!state.direction || !pairConfig || riskPercentInput === "" || entryPriceInput === "" || stopLossPriceInput === "") {
                 updateResults(0, 0, 0, 0, 0, 0, 0, 0);
                 document.getElementById('calculated-sl-pips').value = "";
                 document.getElementById('calculated-tp-pips').value = "";
                 document.getElementById('take-profit-price').value = "";
-                
                 const rrMirror = document.getElementById('take-profit-rr-mirror');
                 if (rrMirror) rrMirror.value = "";
-                
                 document.getElementById('balance-if-loss').textContent = formattedCurrentBalance;
                 document.getElementById('balance-if-win').textContent = formattedCurrentBalance;
                 return;
@@ -1711,10 +1564,8 @@
                 document.getElementById('calculated-sl-pips').value = "";
                 document.getElementById('calculated-tp-pips').value = "";
                 document.getElementById('take-profit-price').value = "";
-                
                 const rrMirror = document.getElementById('take-profit-rr-mirror');
                 if (rrMirror) rrMirror.value = "";
-                
                 document.getElementById('balance-if-loss').textContent = formattedCurrentBalance;
                 document.getElementById('balance-if-win').textContent = formattedCurrentBalance;
                 return;
@@ -1723,7 +1574,6 @@
             const pipSize = pairConfig.pipSize;
             const multiplier = 1 / pipSize;
             const decimals = (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(state.pair)) ? 2 : (pairConfig.isJpy ? 3 : 5);
-
             const isIndexOrGold = ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(state.pair);
             const unitLabel = isIndexOrGold ? "PUNTOS" : "PIPS";
 
@@ -1736,27 +1586,6 @@
             const priceDiff = Math.abs(entryPrice - stopLossPrice);
             const calculatedSLPips = Math.round((priceDiff * multiplier) * 10) / 10;
 
-            const warningBanner = document.getElementById('direction-warning');
-            const warningText = document.getElementById('direction-warning-text');
-            let isConsistent = true;
-
-            if (state.direction === 'BUY' && stopLossPrice >= entryPrice) {
-                isConsistent = false;
-                if (warningText) warningText.textContent = `⚠️ Error: En COMPRA, el Stop Loss debe estar por debajo del Entrada.`;
-            } else if (state.direction === 'SELL' && stopLossPrice <= entryPrice) {
-                isConsistent = false;
-                if (warningText) warningText.textContent = `⚠️ Error: En VENTA, el Stop Loss debe estar por encima del Entrada.`;
-            }
-
-            if (warningBanner) {
-                if (!isConsistent) {
-                    warningBanner.classList.remove('hidden');
-                } else {
-                    warningBanner.classList.add('hidden');
-                }
-            }
-
-            // Lógica para determinar el Take Profit y el Ratio R:R de forma cruzada
             let calculatedTPPips = 0;
             let takeProfitPriceVal = entryPrice;
             let rrRatio = 3.0;
@@ -1771,13 +1600,7 @@
                 }
                 rrRatio = parseCleanFloat(ratioInput);
                 calculatedTPPips = Math.round((calculatedSLPips * rrRatio) * 10) / 10;
-
-                if (state.direction === 'BUY') {
-                    takeProfitPriceVal = entryPrice + (calculatedTPPips * pipSize);
-                } else {
-                    takeProfitPriceVal = entryPrice - (calculatedTPPips * pipSize);
-                }
-
+                takeProfitPriceVal = state.direction === 'BUY' ? (entryPrice + (calculatedTPPips * pipSize)) : (entryPrice - (calculatedTPPips * pipSize));
                 document.getElementById('take-profit-price').value = takeProfitPriceVal.toFixed(decimals);
             } else {
                 const priceInput = document.getElementById('tp-price-input').value.trim();
@@ -1791,48 +1614,31 @@
                 takeProfitPriceVal = parseCleanFloat(priceInput);
                 const tpPriceDiff = Math.abs(takeProfitPriceVal - entryPrice);
                 calculatedTPPips = Math.round((tpPriceDiff * multiplier) * 10) / 10;
-
-                if (calculatedSLPips > 0) {
-                    rrRatio = calculatedTPPips / calculatedSLPips;
-                } else {
-                    rrRatio = 0;
-                }
-
+                rrRatio = calculatedSLPips > 0 ? (calculatedTPPips / calculatedSLPips) : 0;
                 const rrMirrorEl = document.getElementById('take-profit-rr-mirror');
                 if (rrMirrorEl) rrMirrorEl.value = `1 : ${rrRatio.toFixed(1)}`;
             }
 
             document.getElementById('calculated-sl-pips').value = calculatedSLPips;
             document.getElementById('calculated-tp-pips').value = calculatedTPPips;
-
             state.takeProfit = calculatedTPPips;
 
             if (calculatedSLPips <= 0) {
-                updateResults(0, 0, 0, 0, 0, 0, 0, 0);
-                return;
+                updateResults(0, 0, 0, 0, 0, 0, 0, 0); return;
             }
 
             const riskCash = balance * (riskPercent / 100);
-
             let quoteToAccRate = parseFloat(document.getElementById('custom-rate-quote-acc').value);
-            if (isNaN(quoteToAccRate)) {
-                quoteToAccRate = getCrossRate(pairConfig.quote, state.accountCurrency);
-            }
+            if (isNaN(quoteToAccRate)) quoteToAccRate = getCrossRate(pairConfig.quote, state.accountCurrency);
 
             const pipValueInAccountCurrency = pairConfig.contractSize * pipSize * quoteToAccRate;
-
-            let calculatedLots = 0;
-            if (pipValueInAccountCurrency > 0) {
-                calculatedLots = riskCash / (calculatedSLPips * pipValueInAccountCurrency);
-            }
-
+            const calculatedLots = pipValueInAccountCurrency > 0 ? (riskCash / (calculatedSLPips * pipValueInAccountCurrency)) : 0;
             const finalLots = Math.max(0, calculatedLots);
             const totalPipValue = finalLots * pipValueInAccountCurrency;
             const potentialReward = totalPipValue * calculatedTPPips;
 
             const baseToAccRate = getBaseToAccountMultiplier(pairConfig, entryPrice);
-            const totalPositionUnits = finalLots * pairConfig.contractSize;
-            const requiredMargin = (totalPositionUnits * baseToAccRate) / leverage;
+            const requiredMargin = ((finalLots * pairConfig.contractSize) * baseToAccRate) / leverage;
 
             const expectedBalanceLoss = balance - riskCash;
             const expectedBalanceWin = balance + potentialReward;
@@ -1843,27 +1649,16 @@
             updateResults(finalLots, riskCash, potentialReward, totalPipValue, calculatedTPPips, requiredMargin, calculatedSLPips, rrRatio);
         }
 
-        // ACTUALIZACIÓN DE COMPONENTES VISUALES EN LA UI
         function updateResults(lots, riskCash, potentialReward, pipValue, tpPips, requiredMargin, slPips, rrRatio) {
-            // Actualizar Lotes Estándar Sugeridos Integrados
             document.getElementById('lots-standard').textContent = lots.toFixed(2);
-
             const symbol = document.getElementById('account-currency-symbol').textContent;
-            
             document.getElementById('risk-cash').textContent = `-${symbol}${riskCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            if (tpPips > 0 && state.direction) {
-                document.getElementById('reward-cash').textContent = `+${symbol}${potentialReward.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            } else {
-                document.getElementById('reward-cash').textContent = `${symbol}0.00`;
-            }
-
+            document.getElementById('reward-cash').textContent = (tpPips > 0 && state.direction) ? `+${symbol}${potentialReward.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : `${symbol}0.00`;
             document.getElementById('pip-value-display').textContent = `${symbol}${pipValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
 
             const marginElement = document.getElementById('margin-required');
             const marginWarningBadge = document.getElementById('margin-warning-badge');
             const marginContainer = document.getElementById('margin-container');
-
             marginElement.textContent = `${symbol}${requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
             if (requiredMargin > state.balance) {
@@ -1890,12 +1685,8 @@
 
             if (tpPips > 0 && slPips > 0 && state.direction) {
                 rrBadge.textContent = `1 : ${rrRatio.toFixed(1)}`;
-
-                const lossPct = (1 / (1 + rrRatio)) * 100;
-                const gainPct = (rrRatio / (1 + rrRatio)) * 100;
-
-                rrBarLoss.style.width = `${lossPct}%`;
-                rrBarGain.style.width = `${gainPct}%`;
+                const lossPct = (1 / (1 + rrRatio)) * 100; const gainPct = (rrRatio / (1 + rrRatio)) * 100;
+                rrBarLoss.style.width = `${lossPct}%`; rrBarGain.style.width = `${gainPct}%`;
 
                 if (rrRatio < 1) {
                     rrBadge.className = "text-xs font-extrabold bg-rose-500/10 text-rose-400 px-3 py-1.5 rounded-xl border border-rose-500/10";
@@ -1908,78 +1699,46 @@
                     rrVerdict.textContent = "🔥 Excelente relación riesgo/beneficio para mantener rentabilidad consistente.";
                 }
             } else {
-                rrBadge.textContent = "Sin TP";
-                rrBadge.className = "text-xs font-extrabold bg-slate-800 text-slate-400 px-3 py-1 rounded-xl";
-                rrBarLoss.style.width = `100%`;
-                rrBarGain.style.width = `0%`;
+                rrBadge.textContent = "Sin TP"; rrBadge.className = "text-xs font-extrabold bg-slate-800 text-slate-400 px-3 py-1 rounded-xl";
+                rrBarLoss.style.width = `100%`; rrBarGain.style.width = `0%`;
                 rrVerdict.textContent = "Establece precios correctos de entrada y SL para realizar el análisis de asimetría.";
             }
 
             updateMultiRiskTable(lots, riskCash);
         }
 
-        // TABLA DINÁMICA MULTI-RIESGO
         function updateMultiRiskTable(baseLots, baseRiskCash) {
             const currentRiskPercent = state.riskPercent;
             const updateItem = (suffix, targetRisk) => {
                 const multiplier = currentRiskPercent > 0 ? (targetRisk / currentRiskPercent) : 0;
-                const calculatedLots = baseLots * multiplier;
-                const calculatedCash = baseRiskCash * multiplier;
+                const calculatedLots = baseLots * multiplier; const calculatedCash = baseRiskCash * multiplier;
                 const symbol = document.getElementById('account-currency-symbol').textContent;
-
                 document.getElementById(`multi-lots-${suffix}`).textContent = `${calculatedLots.toFixed(2)} ${calculatedLots === 1 ? 'Lote' : 'Lotes'}`;
                 document.getElementById(`multi-cash-${suffix}`).textContent = `-${symbol}${calculatedCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             };
-
-            updateItem('05', 0.5);
-            updateItem('10', 1.0);
-            updateItem('15', 2.0);
-            updateItem('20', 5.0);
+            updateItem('05', 0.5); updateItem('10', 1.0); updateItem('15', 2.0); updateItem('20', 5.0);
         }
 
-        // GESTIÓN DEL PORTAFOLIO DE TRADES HISTÓRICOS (BITÁCORA INFERIOR DE ANCHO COMPLETO)
         function executeTrade() {
-            const lotsText = document.getElementById('lots-standard').textContent;
-            const lots = parseFloat(lotsText) || 0;
-
+            const lots = parseFloat(document.getElementById('lots-standard').textContent) || 0;
             if (lots <= 0) {
-                showToast("No se puede registrar un trade con lotaje cero.", "error");
-                return;
+                showToast("No se puede registrar un trade con lotaje cero.", "error"); return;
             }
 
-            const tpPrice = state.benefitMethod === 'ratio' 
-                ? parseFloat(document.getElementById('take-profit-price').value) 
-                : parseFloat(document.getElementById('tp-price-input').value);
-
-            // Crear objeto de la orden
+            const tpPrice = state.benefitMethod === 'ratio' ? parseFloat(document.getElementById('take-profit-price').value) : parseFloat(document.getElementById('tp-price-input').value);
             const newTrade = {
-                id: Date.now(),
-                timestamp: new Date().toLocaleString('es-ES', { hour12: false }),
-                pair: state.pair,
-                direction: state.direction,
-                balance: state.balance,
-                riskPercent: state.riskPercent,
-                lots: lots,
-                entryPrice: state.entryPrice,
-                stopLossPrice: state.stopLossPrice,
-                takeProfitPrice: tpPrice,
-                slPips: parseFloat(document.getElementById('calculated-sl-pips').value),
-                tpPips: parseFloat(document.getElementById('calculated-tp-pips').value),
-                riskCash: document.getElementById('risk-cash').textContent,
-                rewardCash: document.getElementById('reward-cash').textContent,
-                marginRequired: document.getElementById('margin-required').textContent,
-                rrRatio: document.getElementById('rr-badge').textContent
+                id: Date.now(), timestamp: new Date().toLocaleString('es-ES', { hour12: false }),
+                pair: state.pair, direction: state.direction, balance: state.balance, riskPercent: state.riskPercent,
+                lots: lots, entryPrice: state.entryPrice, stopLossPrice: state.stopLossPrice, takeProfitPrice: tpPrice,
+                slPips: parseFloat(document.getElementById('calculated-sl-pips').value), tpPips: parseFloat(document.getElementById('calculated-tp-pips').value),
+                riskCash: document.getElementById('risk-cash').textContent, rewardCash: document.getElementById('reward-cash').textContent,
+                marginRequired: document.getElementById('margin-required').textContent, rrRatio: document.getElementById('rr-badge').textContent
             };
 
-            // Añadir al estado y persistir
             state.trades.unshift(newTrade);
             localStorage.setItem('oso_master_trades_v5', JSON.stringify(state.trades));
-
-            // Actualizar tabla en pantalla
             renderTradesTable();
             showToast(`¡Trade de ${state.direction} registrado en bitácora!`, "success");
-
-            // UX: Contraer el formulario para planificar un nuevo trade
             collapseTradeForm();
         }
 
@@ -1989,51 +1748,30 @@
             const totalRiskSpan = document.getElementById('stat-total-risk');
 
             if (state.trades.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">
-                            No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".
-                        </td>
-                    </tr>
-                `;
-                totalTradesSpan.textContent = "0";
-                totalRiskSpan.textContent = "0.0%";
-                return;
+                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".</td></tr>`;
+                totalTradesSpan.textContent = "0"; totalRiskSpan.textContent = "0.0%"; return;
             }
 
-            let html = "";
-            let accumulatedRisk = 0;
-
+            let html = ""; let accumulatedRisk = 0;
             state.trades.forEach(trade => {
                 accumulatedRisk += trade.riskPercent;
                 const dirColor = trade.direction === 'BUY' ? 'text-emerald-400' : 'text-rose-400';
                 const dirBg = trade.direction === 'BUY' ? 'bg-emerald-500/10' : 'bg-rose-500/10';
 
-                html += `
-                    <tr class="hover:bg-slate-900/40 transition-colors">
-                        <td class="p-4 border-b border-slate-900 font-mono text-[10px] text-slate-400">
-                            <div>${trade.timestamp}</div>
-                            <span class="text-[9px] text-slate-600 block">ID: ${trade.id}</span>
-                        </td>
-                        <td class="p-4 border-b border-slate-900 font-extrabold text-white">${trade.pair}</td>
-                        <td class="p-4 border-b border-slate-900 font-mono text-[10px]">
-                            <span class="px-2 py-1 rounded-md ${dirBg} ${dirColor} font-black">${trade.direction}</span>
-                        </td>
-                        <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${trade.lots.toFixed(2)}</td>
-                        <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${trade.entryPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                        <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.stopLossPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                        <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${trade.takeProfitPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                        <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.riskCash} (${trade.riskPercent}%)</td>
-                        <td class="p-4 border-b border-slate-900 text-center space-x-1.5 flex justify-center items-center">
-                            <button onclick="openTradeModal(${trade.id})" class="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-slate-950 font-bold rounded-lg transition-all text-[10px]">
-                                Ver Ficha
-                            </button>
-                            <button onclick="deleteTrade(${trade.id})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-all" title="Eliminar del Historial">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            </button>
-                        </td>
-                    </tr>
-                `;
+                html += `<tr class="hover:bg-slate-900/40 transition-colors">
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px] text-slate-400"><div>${trade.timestamp}</div><span class="text-[9px] text-slate-600 block">ID: ${trade.id}</span></td>
+                    <td class="p-4 border-b border-slate-900 font-extrabold text-white">${trade.pair}</td>
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${dirBg} ${dirColor} font-black">${trade.direction}</span></td>
+                    <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${trade.lots.toFixed(2)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${trade.entryPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.stopLossPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${trade.takeProfitPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.riskCash} (${trade.riskPercent}%)</td>
+                    <td class="p-4 border-b border-slate-900 text-center space-x-1.5 flex justify-center items-center">
+                        <button onclick="openTradeModal(${trade.id})" class="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-slate-950 font-bold rounded-lg transition-all text-[10px]">Ver Ficha</button>
+                        <button onclick="deleteTrade(${trade.id})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-all"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    </td>
+                </tr>`;
             });
 
             tbody.innerHTML = html;
@@ -2041,7 +1779,6 @@
             totalRiskSpan.textContent = accumulatedRisk.toFixed(1) + "%";
         }
 
-        // CONTROL DEL MODAL POPUP DETALLADO
         function openTradeModal(id) {
             const trade = state.trades.find(t => t.id === id);
             if (!trade) return;
@@ -2051,15 +1788,12 @@
             
             const directionIcon = document.getElementById('modal-direction-icon');
             if (trade.direction === 'BUY') {
-                directionIcon.textContent = 'COMPRA';
-                directionIcon.className = "p-2 bg-emerald-500/10 text-emerald-400 rounded-xl font-black text-xs";
+                directionIcon.textContent = 'COMPRA'; directionIcon.className = "p-2 bg-emerald-500/10 text-emerald-400 rounded-xl font-black text-xs";
             } else {
-                directionIcon.textContent = 'VENTA';
-                directionIcon.className = "p-2 bg-rose-500/10 text-rose-400 rounded-xl font-black text-xs";
+                directionIcon.textContent = 'VENTA'; directionIcon.className = "p-2 bg-rose-500/10 text-rose-400 rounded-xl font-black text-xs";
             }
 
             const symbol = document.getElementById('account-currency-symbol').textContent;
-
             document.getElementById('modal-lots').textContent = trade.lots.toFixed(2) + " Lotes";
             document.getElementById('modal-entry').textContent = trade.entryPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('modal-sl').textContent = trade.stopLossPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -2073,40 +1807,23 @@
             const unitLabel = ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(trade.pair) ? "Puntos" : "Pips";
             document.getElementById('modal-pips-dist').textContent = `${trade.slPips} / ${trade.tpPips} ${unitLabel}`;
 
-            // Animaciones del popup
             const modal = document.getElementById('trade-modal');
             const container = document.getElementById('modal-container');
-
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                container.classList.remove('scale-95', 'opacity-0');
-                container.classList.add('scale-100', 'opacity-100');
-            }, 10);
+            setTimeout(() => { container.classList.remove('scale-95', 'opacity-0'); container.classList.add('scale-100', 'opacity-100'); }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('trade-modal');
             const container = document.getElementById('modal-container');
-
-            container.classList.remove('scale-100', 'opacity-100');
-            container.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 250);
+            container.classList.remove('scale-100', 'opacity-100'); container.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 250);
         }
 
-        // UTILIDADES Y PORTAPAPELES
         function copyLot(elementId) {
             const textToCopy = document.getElementById(elementId).textContent;
-            
-            const el = document.createElement('textarea');
-            el.value = textToCopy;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-
+            const el = document.createElement('textarea'); el.value = textToCopy;
+            document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
             showToast(`Lotes copiados con éxito: ${textToCopy}`, "success");
         }
 
@@ -2114,7 +1831,6 @@
             const toast = document.getElementById('toast');
             const iconContainer = document.getElementById('toast-icon');
             const msgContainer = document.getElementById('toast-message');
-
             msgContainer.textContent = message;
 
             if (type === "success") {
@@ -2130,11 +1846,7 @@
 
             toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
             toast.classList.add('opacity-100', 'translate-y-0');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('opacity-100', 'translate-y-0'); toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none'); }, 3000);
         }
 
         function deleteTrade(id) {

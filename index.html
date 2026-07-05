@@ -104,7 +104,7 @@
             overscroll-behavior-x: contain;
         }
         #trades-log-content table {
-            min-width: 920px;
+            min-width: 1180px;
         }
         .mobile-metrics-bridge {
             display: none !important;
@@ -381,7 +381,7 @@
 
             <!-- CONTAINER MAESTRO DE ACCIONES -->
             <div id="unified-card-container" class="w-full max-w-[320px] transition-all duration-500 ease-in-out relative z-10">
-                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col lg:flex-row lg:items-stretch lg:h-[480px] relative">
+                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col lg:flex-row lg:items-stretch lg:h-[528px] relative">
                     
                     <!-- SUB-MÓDULO 1: CONFIGURACIÓN DE LA CUENTA (SIEMPRE FIJO A LA IZQUIERDA, 320PX) -->
                     <div class="w-full lg:w-[320px] shrink-0 p-6 bg-slate-950/90 border-r border-slate-900/40 flex flex-col justify-between h-full z-10">
@@ -493,7 +493,7 @@
                         </div>
 
                         <!-- Área de Contenido -->
-                        <div class="py-2.5 space-y-3 flex-grow flex flex-col justify-between">
+                        <div class="py-2 space-y-2.5 flex-grow flex flex-col justify-between">
                             
                             <!-- Fila A: Activo, Riesgo, Método de TP (3 Columnas) -->
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -618,7 +618,7 @@
                             </div>
 
                             <!-- Fila D: Saldos Post-Trade y Módulo Unificado de Lotes Sugeridos -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-slate-900/40 pt-3 items-stretch">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-slate-900/40 pt-2.5 items-stretch">
                                 <div class="bg-slate-950/80 border border-rose-950/30 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
                                     <span class="text-[8px] font-bold text-rose-500/80 block uppercase mb-1 tracking-wider text-center">Saldo si toca SL</span>
                                     <span id="balance-if-loss" class="text-xs font-black text-rose-500 font-mono block text-center">$10,000.00</span>
@@ -638,6 +638,23 @@
                                             <span>Copiar</span>
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- Fila D.1: Margen en Tiempo Real para Nuevas Operaciones -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-slate-900/40 pt-2.5 items-stretch">
+                                <div class="bg-slate-950/80 border border-blue-500/20 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
+                                    <span class="text-[8px] font-bold text-blue-400/80 block uppercase mb-1 tracking-wider text-center">Margen usado abierto</span>
+                                    <span id="scenario-margin-used" class="text-xs font-black text-blue-400 font-mono block text-center">$0.00</span>
+                                </div>
+                                <div class="bg-slate-950/80 border border-amber-500/20 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
+                                    <span class="text-[8px] font-bold text-amber-400/80 block uppercase mb-1 tracking-wider text-center">Margen necesario</span>
+                                    <span id="scenario-margin-required" class="text-xs font-black text-amber-400 font-mono block text-center">$0.00</span>
+                                </div>
+                                <div id="scenario-margin-available-card" class="bg-slate-950/80 border border-emerald-500/20 p-2.5 rounded-xl shadow-inner flex flex-col justify-center">
+                                    <span class="text-[8px] font-bold text-emerald-400/80 block uppercase mb-1 tracking-wider text-center">Disponible al ejecutar</span>
+                                    <span id="scenario-margin-available" class="text-xs font-black text-emerald-400 font-mono block text-center">$0.00</span>
+                                    <span id="scenario-margin-status" class="text-[7px] font-black uppercase tracking-widest text-center mt-1 text-emerald-400">Suficiente</span>
                                 </div>
                             </div>
 
@@ -663,7 +680,7 @@
                         </div>
 
                         <!-- Fila E: Botón de Bitácora y Tasas Desplegables -->
-                        <div class="flex items-center justify-between border-t border-slate-900/40 pt-4 mt-auto shrink-0 z-10">
+                        <div class="flex items-center justify-between border-t border-slate-900/40 pt-3 mt-auto shrink-0 z-10">
                             <div>
                                 <button type="button" onclick="toggleExchangeRateSection()" class="inline-flex items-center space-x-1 text-[9px] font-black text-slate-400 hover:text-white uppercase tracking-widest transition-colors py-1.5">
                                     <span>Garantías Manuales</span>
@@ -673,7 +690,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button type="button" onclick="executeTrade()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[10px] tracking-widest rounded-xl transition-all shadow-lg flex items-center justify-center space-x-1.5">
+                                <button type="button" onclick="executeTrade()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[10px] tracking-widest rounded-xl transition-all shadow-lg flex items-center justify-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.63 8.41a14.98 14.98 0 0 0-3.47 5.96m8-1.58A5.98 5.98 0 0 0 11.5 6a5.98 5.98 0 0 0-4.8 2.58m4.8 2.58a14.98 14.98 0 0 1-6.16 12.12A14.98 14.98 0 0 1 14.37 11.5Z"/>
                                     </svg>
@@ -826,34 +843,78 @@
                                 <span class="text-[9px] text-slate-500 block font-bold uppercase tracking-wider">Riesgo Acumulado</span>
                                 <span id="stat-total-risk" class="text-sm font-black text-rose-500 font-mono">0.0%</span>
                             </div>
+                            <div class="bg-slate-950/80 border border-blue-500/20 px-4 py-2 rounded-xl text-center">
+                                <span class="text-[9px] text-slate-500 block font-bold uppercase tracking-wider">Margen Usado</span>
+                                <span id="stat-margin-used" class="text-sm font-black text-blue-400 font-mono">$0.00</span>
+                            </div>
+                            <div id="stat-margin-available-card" class="bg-slate-950/80 border border-emerald-500/20 px-4 py-2 rounded-xl text-center">
+                                <span class="text-[9px] text-slate-500 block font-bold uppercase tracking-wider">Margen Disponible</span>
+                                <span id="stat-margin-available" class="text-sm font-black text-emerald-400 font-mono">$0.00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tabla de Trades -->
-                <div id="trades-log-content" class="overflow-x-auto transition-all duration-300">
-                    <table class="w-full text-left text-xs text-slate-400 border-collapse">
-                        <thead class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest bg-slate-950/50">
-                            <tr>
-                                <th class="p-4 border-b border-slate-900">ID / Fecha</th>
-                                <th class="p-4 border-b border-slate-900">Activo</th>
-                                <th class="p-4 border-b border-slate-900">Orden</th>
-                                <th class="p-4 border-b border-slate-900 text-right">Lotes</th>
-                                <th class="p-4 border-b border-slate-900 text-right">Entrada</th>
-                                <th class="p-4 border-b border-slate-900 text-right">Stop Loss</th>
-                                <th class="p-4 border-b border-slate-900 text-right">Take Profit</th>
-                                <th class="p-4 border-b border-slate-900 text-right">Riesgo</th>
-                                <th class="p-4 border-b border-slate-900 text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trades-table-body" class="divide-y divide-slate-900/60">
-                            <tr>
-                                <td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">
-                                    No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="trades-log-content" class="overflow-x-auto transition-all duration-300 space-y-8">
+                    <div>
+                        <div class="flex items-center justify-between gap-3 mb-3">
+                            <h3 class="text-[11px] font-black text-amber-400 uppercase tracking-widest">Trades abiertos</h3>
+                            <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Margen vivo calculado sobre operaciones abiertas</span>
+                        </div>
+                        <table class="w-full text-left text-xs text-slate-400 border-collapse">
+                            <thead class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest bg-slate-950/50">
+                                <tr>
+                                    <th class="p-4 border-b border-slate-900">ID / Fecha</th>
+                                    <th class="p-4 border-b border-slate-900">Activo</th>
+                                    <th class="p-4 border-b border-slate-900">Orden</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Lotes</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Entrada</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Stop Loss</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Take Profit</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Riesgo</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Margen</th>
+                                    <th class="p-4 border-b border-slate-900 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trades-table-body" class="divide-y divide-slate-900/60">
+                                <tr>
+                                    <td colspan="10" class="p-8 text-center text-slate-500 italic font-semibold">
+                                        No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="border-t border-amber-500/20 pt-6">
+                        <div class="flex items-center justify-between gap-3 mb-3">
+                            <h3 class="text-[11px] font-black text-slate-300 uppercase tracking-widest">Trades concluidos</h3>
+                            <span id="stat-closed-trades" class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">0 cerrados</span>
+                        </div>
+                        <table class="w-full text-left text-xs text-slate-400 border-collapse">
+                            <thead class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest bg-slate-950/50">
+                                <tr>
+                                    <th class="p-4 border-b border-slate-900">Cierre / ID</th>
+                                    <th class="p-4 border-b border-slate-900">Activo</th>
+                                    <th class="p-4 border-b border-slate-900">Resultado</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Lotes</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">Entrada</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">SL Final</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">TP Final</th>
+                                    <th class="p-4 border-b border-slate-900 text-right">P/L Estimado</th>
+                                    <th class="p-4 border-b border-slate-900 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="closed-trades-table-body" class="divide-y divide-slate-900/60">
+                                <tr>
+                                    <td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">
+                                        Todavía no hay trades concluidos.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -936,9 +997,73 @@
                         <span id="modal-pips-dist" class="text-xs font-bold text-slate-300 font-mono">20 / 60 Puntos</span>
                     </div>
                 </div>
+
+                <div id="trade-edit-panel" class="hidden bg-slate-950/70 border border-amber-500/20 p-4 rounded-2xl space-y-3">
+                    <div>
+                        <h4 class="text-[11px] font-black text-amber-400 uppercase tracking-widest">Editar trade en tiempo real</h4>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Modifica el Stop Loss y/o Take Profit. La ficha y la bitácora recalculan riesgo, beneficio y ratio.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Nuevo Stop Loss</label>
+                            <input type="text" id="edit-sl-input" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-black font-mono text-xs focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Nuevo Take Profit</label>
+                            <input type="text" id="edit-tp-input" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl text-white font-black font-mono text-xs focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button onclick="toggleEditTradePanel(false)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold rounded-xl transition-all">Cancelar</button>
+                        <button onclick="saveTradeEdits()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-[10px] font-black rounded-xl transition-all">Guardar cambios</button>
+                    </div>
+                </div>
+
+                <div id="trade-close-panel" class="hidden bg-slate-950/70 border border-rose-500/20 p-4 rounded-2xl space-y-3">
+                    <div>
+                        <h4 class="text-[11px] font-black text-rose-400 uppercase tracking-widest">Cerrar trade</h4>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-1">Antes de cerrar, confirma si faltó registrar una modificación de SL o TP y luego indica si el trade tocó TP o SL.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">¿Hay modificación pendiente?</label>
+                            <select id="close-pending-modification" onchange="handlePendingModificationToggle()" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-bold text-xs focus:outline-none">
+                                <option value="no" selected>No, cerrar sin modificar</option>
+                                <option value="yes">Sí, debo ajustar SL/TP</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Resultado final</label>
+                            <select id="close-result" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-bold text-xs focus:outline-none">
+                                <option value="TP" selected>Tocó TP</option>
+                                <option value="SL">Tocó SL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="close-modification-fields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">SL actualizado antes de cerrar</label>
+                            <input type="text" id="close-sl-input" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-black font-mono text-xs focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">TP actualizado antes de cerrar</label>
+                            <input type="text" id="close-tp-input" class="block w-full px-3 py-2 bg-slate-900 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl text-white font-black font-mono text-xs focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button onclick="toggleCloseTradePanel(false)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold rounded-xl transition-all">Cancelar</button>
+                        <button onclick="finalizeCloseTrade()" class="px-4 py-2 bg-rose-500 hover:bg-rose-400 text-white text-[10px] font-black rounded-xl transition-all">Confirmar cierre</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-slate-900/50 p-4 border-t border-slate-800/80 flex justify-end space-x-3">
+            <div class="bg-slate-900/50 p-4 border-t border-slate-800/80 flex flex-wrap justify-end gap-3">
+                <button id="modal-edit-btn" onclick="toggleEditTradePanel(true)" class="px-5 py-2.5 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-slate-950 text-xs font-black rounded-xl transition-all">
+                    Editar Trade
+                </button>
+                <button id="modal-close-trade-btn" onclick="toggleCloseTradePanel(true)" class="px-5 py-2.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-black rounded-xl transition-all">
+                    Cerrar Trade
+                </button>
                 <button onclick="closeModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all">
                     Cerrar Detalle
                 </button>
@@ -988,13 +1113,19 @@
             pair: "XAU/USD",
             benefitMethod: "ratio",
             tpPriceInputVal: 2380.00,
-            trades: []
+            trades: [],
+            closedTrades: [],
+            currentRequiredMargin: 0,
+            currentAvailableMargin: 10000,
+            currentAvailableAfterTrade: 10000
         };
 
         let previousDirection = null;
         let metricsTimeout = null;
         let financialMetricsCollapsed = false;
         let tradesLogCollapsed = false;
+        let currentModalTradeId = null;
+        let currentModalTradeIsClosed = false;
 
         function parseCleanFloat(valStr) {
             if (valStr === undefined || valStr === null) return 0;
@@ -1049,9 +1180,18 @@
             const savedTrades = localStorage.getItem('oso_master_trades_v5');
             if (savedTrades) {
                 try {
-                    state.trades = JSON.parse(savedTrades);
+                    state.trades = JSON.parse(savedTrades) || [];
                 } catch(e) {
                     state.trades = [];
+                }
+            }
+
+            const savedClosedTrades = localStorage.getItem('oso_master_closed_trades_v5');
+            if (savedClosedTrades) {
+                try {
+                    state.closedTrades = JSON.parse(savedClosedTrades) || [];
+                } catch(e) {
+                    state.closedTrades = [];
                 }
             }
             renderTradesTable();
@@ -1457,6 +1597,7 @@
             const symbol = symbolMap[state.accountCurrency] || "$";
             document.getElementById('account-currency-symbol').textContent = symbol;
             updateCustomRateUI();
+            updateMarginAvailabilityUI(state.currentRequiredMargin || 0);
         }
 
         function toggleExchangeRateSection() {
@@ -1520,6 +1661,177 @@
                 return entryPrice * getCrossRate("USD", state.accountCurrency);
             }
             return getCrossRate(pairConfig.base, state.accountCurrency);
+        }
+
+        function getBaseToAccountMultiplierForCurrency(pairConfig, entryPrice, accountCurrency) {
+            if (pairConfig.base === accountCurrency) return 1.0;
+            const originalCurrency = state.accountCurrency;
+            state.accountCurrency = accountCurrency || originalCurrency;
+            const multiplier = getBaseToAccountMultiplier(pairConfig, entryPrice);
+            state.accountCurrency = originalCurrency;
+            return multiplier;
+        }
+
+        function getCurrencySymbol(currency = state.accountCurrency) {
+            const symbolMap = { "USD": "$", "EUR": "€", "GBP": "£", "JPY": "¥", "CAD": "C$", "AUD": "A$", "CHF": "₣" };
+            return symbolMap[currency] || "$";
+        }
+
+        function formatMoneyValue(value, currency = state.accountCurrency, includeSign = false) {
+            const symbol = getCurrencySymbol(currency);
+            const numeric = Number(value) || 0;
+            const positiveSign = includeSign && numeric > 0 ? "+" : "";
+            const negativeSign = numeric < 0 ? "-" : "";
+            return `${positiveSign}${negativeSign}${symbol}${Math.abs(numeric).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        function parseMoneyValue(value) {
+            if (typeof value === 'number') return value;
+            if (value === undefined || value === null) return 0;
+            let clean = value.toString().replace(/[^0-9,.-]/g, '');
+            if (!clean) return 0;
+            const lastComma = clean.lastIndexOf(',');
+            const lastDot = clean.lastIndexOf('.');
+            if (lastComma > -1 && lastDot > -1) {
+                clean = lastComma > lastDot ? clean.replace(/\./g, '').replace(',', '.') : clean.replace(/,/g, '');
+            } else if (lastComma > -1) {
+                clean = clean.replace(',', '.');
+            }
+            return parseFloat(clean) || 0;
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+        }
+
+        function getPairDecimals(pair) {
+            const pairConfig = currencyPairs[pair];
+            if (!pairConfig) return 2;
+            return (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(pair)) ? 2 : (pairConfig.isJpy ? 3 : 5);
+        }
+
+        function getUnitLabelForPair(pair) {
+            return ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(pair) ? "Puntos" : "Pips";
+        }
+
+        function getTradeMarginValue(trade) {
+            return Number(trade.marginRequiredValue) || parseMoneyValue(trade.marginRequired) || 0;
+        }
+
+        function getOpenMarginUsed(excludeId = null) {
+            return (state.trades || []).reduce((sum, trade) => {
+                if (excludeId !== null && trade.id === excludeId) return sum;
+                return sum + getTradeMarginValue(trade);
+            }, 0);
+        }
+
+        function updateMarginAvailabilityUI(requiredMargin = state.currentRequiredMargin || 0) {
+            const balanceEl = document.getElementById('account-balance');
+            const balance = parseCleanFloat(balanceEl ? balanceEl.value : state.balance);
+            state.balance = balance;
+            const currency = state.accountCurrency || (document.getElementById('account-currency') ? document.getElementById('account-currency').value : 'USD');
+            const openMarginUsed = getOpenMarginUsed();
+            const availableBefore = balance - openMarginUsed;
+            const availableAfter = availableBefore - (Number(requiredMargin) || 0);
+            state.currentRequiredMargin = Number(requiredMargin) || 0;
+            state.currentAvailableMargin = availableBefore;
+            state.currentAvailableAfterTrade = availableAfter;
+
+            const statUsed = document.getElementById('stat-margin-used');
+            const statAvailable = document.getElementById('stat-margin-available');
+            const statAvailableCard = document.getElementById('stat-margin-available-card');
+            if (statUsed) statUsed.textContent = formatMoneyValue(openMarginUsed, currency);
+            if (statAvailable) statAvailable.textContent = formatMoneyValue(availableBefore, currency);
+            if (statAvailableCard) {
+                statAvailableCard.className = availableBefore < 0
+                    ? "bg-slate-950/80 border border-rose-500/30 px-4 py-2 rounded-xl text-center"
+                    : "bg-slate-950/80 border border-emerald-500/20 px-4 py-2 rounded-xl text-center";
+                statAvailable.className = availableBefore < 0
+                    ? "text-sm font-black text-rose-500 font-mono"
+                    : "text-sm font-black text-emerald-400 font-mono";
+            }
+
+            const scenarioUsed = document.getElementById('scenario-margin-used');
+            const scenarioRequired = document.getElementById('scenario-margin-required');
+            const scenarioAvailable = document.getElementById('scenario-margin-available');
+            const scenarioStatus = document.getElementById('scenario-margin-status');
+            const scenarioCard = document.getElementById('scenario-margin-available-card');
+            if (scenarioUsed) scenarioUsed.textContent = formatMoneyValue(openMarginUsed, currency);
+            if (scenarioRequired) scenarioRequired.textContent = formatMoneyValue(requiredMargin, currency);
+            if (scenarioAvailable) scenarioAvailable.textContent = formatMoneyValue(availableAfter, currency);
+            if (scenarioStatus && scenarioCard && scenarioAvailable) {
+                if (availableAfter < 0) {
+                    scenarioStatus.textContent = "Insuficiente";
+                    scenarioStatus.className = "text-[7px] font-black uppercase tracking-widest text-center mt-1 text-rose-400";
+                    scenarioAvailable.className = "text-xs font-black text-rose-500 font-mono block text-center";
+                    scenarioCard.className = "bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-xl shadow-inner flex flex-col justify-center";
+                } else if (availableAfter < balance * 0.2) {
+                    scenarioStatus.textContent = "Ajustado";
+                    scenarioStatus.className = "text-[7px] font-black uppercase tracking-widest text-center mt-1 text-amber-400";
+                    scenarioAvailable.className = "text-xs font-black text-amber-400 font-mono block text-center";
+                    scenarioCard.className = "bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl shadow-inner flex flex-col justify-center";
+                } else {
+                    scenarioStatus.textContent = "Suficiente";
+                    scenarioStatus.className = "text-[7px] font-black uppercase tracking-widest text-center mt-1 text-emerald-400";
+                    scenarioAvailable.className = "text-xs font-black text-emerald-400 font-mono block text-center";
+                    scenarioCard.className = "bg-slate-950/80 border border-emerald-500/20 p-2.5 rounded-xl shadow-inner flex flex-col justify-center";
+                }
+            }
+        }
+
+        function saveTradesToLocal() {
+            localStorage.setItem('oso_master_trades_v5', JSON.stringify(state.trades || []));
+            localStorage.setItem('oso_master_closed_trades_v5', JSON.stringify(state.closedTrades || []));
+        }
+
+        function computeTradeDynamicValues(trade, overrides = {}) {
+            const pairConfig = currencyPairs[trade.pair];
+            if (!pairConfig) return null;
+            const accountCurrency = trade.accountCurrency || state.accountCurrency || 'USD';
+            const entryPrice = Number(overrides.entryPrice ?? trade.entryPrice) || 0;
+            const stopLossPrice = Number(overrides.stopLossPrice ?? trade.stopLossPrice) || 0;
+            const takeProfitPrice = Number(overrides.takeProfitPrice ?? trade.takeProfitPrice) || 0;
+            const lots = Number(trade.lots) || 0;
+            const balance = Number(trade.balance) || state.balance || 0;
+            const pipSize = Number(trade.pipSize) || pairConfig.pipSize;
+            const contractSize = Number(trade.contractSize) || pairConfig.contractSize;
+            const quoteToAccountRate = Number(trade.quoteToAccountRate) || getCrossRate(pairConfig.quote, accountCurrency);
+            const pipValuePerLot = Number(trade.pipValuePerLotValue) || (contractSize * pipSize * quoteToAccountRate);
+            const slPips = Math.round((Math.abs(entryPrice - stopLossPrice) / pipSize) * 10) / 10;
+            const tpPips = Math.round((Math.abs(takeProfitPrice - entryPrice) / pipSize) * 10) / 10;
+            const riskCashValue = slPips * lots * pipValuePerLot;
+            const rewardCashValue = tpPips * lots * pipValuePerLot;
+            const rrRatioNumber = slPips > 0 ? tpPips / slPips : 0;
+            const leverage = Number(trade.leverage) || state.leverage || 100;
+            const baseToAccountRate = Number(trade.baseToAccountRateValue) || getBaseToAccountMultiplierForCurrency(pairConfig, entryPrice, accountCurrency);
+            const marginRequiredValue = ((lots * contractSize) * baseToAccountRate) / leverage;
+            const riskPercent = balance > 0 ? (riskCashValue / balance) * 100 : (Number(trade.riskPercent) || 0);
+            const rewardPercent = balance > 0 ? (rewardCashValue / balance) * 100 : (Number(trade.rewardPercent) || 0);
+            return { accountCurrency, entryPrice, stopLossPrice, takeProfitPrice, lots, slPips, tpPips, riskCashValue, rewardCashValue, rrRatioNumber, marginRequiredValue, riskPercent, rewardPercent, pipSize, contractSize, quoteToAccountRate, pipValuePerLot, baseToAccountRate };
+        }
+
+        function applyComputedValuesToTrade(trade, values) {
+            if (!values) return trade;
+            trade.stopLossPrice = values.stopLossPrice;
+            trade.takeProfitPrice = values.takeProfitPrice;
+            trade.slPips = values.slPips;
+            trade.tpPips = values.tpPips;
+            trade.riskPercent = values.riskPercent;
+            trade.rewardPercent = values.rewardPercent;
+            trade.riskCashValue = values.riskCashValue;
+            trade.rewardCashValue = values.rewardCashValue;
+            trade.marginRequiredValue = values.marginRequiredValue;
+            trade.riskCash = `-${formatMoneyValue(values.riskCashValue, values.accountCurrency)}`;
+            trade.rewardCash = `+${formatMoneyValue(values.rewardCashValue, values.accountCurrency)}`;
+            trade.marginRequired = formatMoneyValue(values.marginRequiredValue, values.accountCurrency);
+            trade.rrRatio = `1 : ${values.rrRatioNumber.toFixed(1)}`;
+            trade.accountCurrency = values.accountCurrency;
+            trade.pipSize = values.pipSize;
+            trade.contractSize = values.contractSize;
+            trade.quoteToAccountRate = values.quoteToAccountRate;
+            trade.pipValuePerLotValue = values.pipValuePerLot;
+            trade.baseToAccountRateValue = values.baseToAccountRate;
+            return trade;
         }
 
         function calculateLotSize() {
@@ -1650,6 +1962,7 @@
         }
 
         function updateResults(lots, riskCash, potentialReward, pipValue, tpPips, requiredMargin, slPips, rrRatio) {
+            state.currentRequiredMargin = Number(requiredMargin) || 0;
             document.getElementById('lots-standard').textContent = lots.toFixed(2);
             const symbol = document.getElementById('account-currency-symbol').textContent;
             document.getElementById('risk-cash').textContent = `-${symbol}${riskCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -1661,12 +1974,13 @@
             const marginContainer = document.getElementById('margin-container');
             marginElement.textContent = `${symbol}${requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
-            if (requiredMargin > state.balance) {
+            const availableBeforeThisTrade = state.balance - getOpenMarginUsed();
+            if (requiredMargin > availableBeforeThisTrade) {
                 marginContainer.className = "bg-rose-500/10 border border-rose-500/30 p-4 rounded-2xl flex flex-col justify-between min-h-[92px] transition-all duration-200";
                 marginElement.className = "text-base font-extrabold text-rose-500 font-mono animate-pulse";
                 marginWarningBadge.textContent = "SIN MARGEN";
                 marginWarningBadge.className = "text-[8px] font-extrabold text-rose-500 bg-rose-500/10 px-2.5 py-0.5 rounded-full uppercase border border-rose-500/20";
-            } else if (requiredMargin > (state.balance * 0.5)) {
+            } else if (requiredMargin > (availableBeforeThisTrade * 0.5)) {
                 marginContainer.className = "bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex flex-col justify-between min-h-[92px] transition-all duration-200";
                 marginElement.className = "text-base font-extrabold text-amber-500 font-mono";
                 marginWarningBadge.textContent = "RIESGO DE EXCESO";
@@ -1705,6 +2019,7 @@
             }
 
             updateMultiRiskTable(lots, riskCash);
+            updateMarginAvailabilityUI(requiredMargin);
         }
 
         function updateMultiRiskTable(baseLots, baseRiskCash) {
@@ -1725,18 +2040,40 @@
                 showToast("No se puede registrar un trade con lotaje cero.", "error"); return;
             }
 
+            const availableBefore = state.balance - getOpenMarginUsed();
+            const requiredMargin = Number(state.currentRequiredMargin) || parseMoneyValue(document.getElementById('margin-required').textContent);
+            if (requiredMargin > availableBefore) {
+                showToast("No hay margen disponible suficiente para abrir otra operación.", "error");
+                updateMarginAvailabilityUI(requiredMargin);
+                return;
+            }
+
+            const pairConfig = currencyPairs[state.pair];
+            const quoteToAccRateInput = parseFloat(document.getElementById('custom-rate-quote-acc').value);
+            const quoteToAccountRate = isNaN(quoteToAccRateInput) ? getCrossRate(pairConfig.quote, state.accountCurrency) : quoteToAccRateInput;
+            const pipValuePerLotValue = pairConfig.contractSize * pairConfig.pipSize * quoteToAccountRate;
+            const baseToAccountRateValue = getBaseToAccountMultiplier(pairConfig, state.entryPrice);
             const tpPrice = state.benefitMethod === 'ratio' ? parseFloat(document.getElementById('take-profit-price').value) : parseFloat(document.getElementById('tp-price-input').value);
+            const rewardCashValue = parseMoneyValue(document.getElementById('reward-cash').textContent);
+            const riskCashValue = parseMoneyValue(document.getElementById('risk-cash').textContent);
+            const rewardPercent = state.balance > 0 ? (rewardCashValue / state.balance) * 100 : 0;
+
             const newTrade = {
-                id: Date.now(), timestamp: new Date().toLocaleString('es-ES', { hour12: false }),
-                pair: state.pair, direction: state.direction, balance: state.balance, riskPercent: state.riskPercent,
+                id: Date.now(), timestamp: new Date().toLocaleString('es-ES', { hour12: false }), status: 'OPEN',
+                pair: state.pair, direction: state.direction, balance: state.balance, accountCurrency: state.accountCurrency, leverage: state.leverage,
+                riskPercent: state.riskPercent, rewardPercent,
                 lots: lots, entryPrice: state.entryPrice, stopLossPrice: state.stopLossPrice, takeProfitPrice: tpPrice,
                 slPips: parseFloat(document.getElementById('calculated-sl-pips').value), tpPips: parseFloat(document.getElementById('calculated-tp-pips').value),
                 riskCash: document.getElementById('risk-cash').textContent, rewardCash: document.getElementById('reward-cash').textContent,
-                marginRequired: document.getElementById('margin-required').textContent, rrRatio: document.getElementById('rr-badge').textContent
+                riskCashValue, rewardCashValue,
+                marginRequired: document.getElementById('margin-required').textContent, marginRequiredValue: requiredMargin,
+                rrRatio: document.getElementById('rr-badge').textContent,
+                pipSize: pairConfig.pipSize, contractSize: pairConfig.contractSize, quoteToAccountRate, pipValuePerLotValue, baseToAccountRateValue,
+                modifications: []
             };
 
             state.trades.unshift(newTrade);
-            localStorage.setItem('oso_master_trades_v5', JSON.stringify(state.trades));
+            saveTradesToLocal();
             renderTradesTable();
             showToast(`¡Trade de ${state.direction} registrado en bitácora!`, "success");
             collapseTradeForm();
@@ -1746,45 +2083,105 @@
             const tbody = document.getElementById('trades-table-body');
             const totalTradesSpan = document.getElementById('stat-total-trades');
             const totalRiskSpan = document.getElementById('stat-total-risk');
+            if (!tbody) return;
 
-            if (state.trades.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".</td></tr>`;
-                totalTradesSpan.textContent = "0"; totalRiskSpan.textContent = "0.0%"; return;
+            if (!state.trades || state.trades.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="p-8 text-center text-slate-500 italic font-semibold">No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".</td></tr>`;
+                if (totalTradesSpan) totalTradesSpan.textContent = "0";
+                if (totalRiskSpan) totalRiskSpan.textContent = "0.0%";
+                renderClosedTradesTable();
+                updateMarginAvailabilityUI(state.currentRequiredMargin || 0);
+                return;
             }
 
             let html = ""; let accumulatedRisk = 0;
             state.trades.forEach(trade => {
-                accumulatedRisk += trade.riskPercent;
+                const computed = computeTradeDynamicValues(trade);
+                if (computed) applyComputedValuesToTrade(trade, computed);
+                accumulatedRisk += Number(trade.riskPercent) || 0;
                 const dirColor = trade.direction === 'BUY' ? 'text-emerald-400' : 'text-rose-400';
                 const dirBg = trade.direction === 'BUY' ? 'bg-emerald-500/10' : 'bg-rose-500/10';
+                const decimals = getPairDecimals(trade.pair);
+                const modificationsCount = (trade.modifications || []).length;
 
                 html += `<tr class="hover:bg-slate-900/40 transition-colors">
-                    <td class="p-4 border-b border-slate-900 font-mono text-[10px] text-slate-400"><div>${trade.timestamp}</div><span class="text-[9px] text-slate-600 block">ID: ${trade.id}</span></td>
-                    <td class="p-4 border-b border-slate-900 font-extrabold text-white">${trade.pair}</td>
-                    <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${dirBg} ${dirColor} font-black">${trade.direction}</span></td>
-                    <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${trade.lots.toFixed(2)}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${trade.entryPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.stopLossPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${trade.takeProfitPrice.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${trade.riskCash} (${trade.riskPercent}%)</td>
-                    <td class="p-4 border-b border-slate-900 text-center space-x-1.5 flex justify-center items-center">
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px] text-slate-400"><div>${escapeHTML(trade.timestamp)}</div><span class="text-[9px] text-slate-600 block">ID: ${trade.id}</span>${modificationsCount ? `<span class="text-[9px] text-amber-400 block mt-1">${modificationsCount} mod.</span>` : ''}</td>
+                    <td class="p-4 border-b border-slate-900 font-extrabold text-white">${escapeHTML(trade.pair)}</td>
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${dirBg} ${dirColor} font-black">${escapeHTML(trade.direction)}</span></td>
+                    <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${Number(trade.lots).toFixed(2)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${escapeHTML(trade.riskCash)} (${(Number(trade.riskPercent) || 0).toFixed(2)}%)</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-blue-400">${formatMoneyValue(getTradeMarginValue(trade), trade.accountCurrency || state.accountCurrency)}</td>
+                    <td class="p-4 border-b border-slate-900 text-center space-x-1.5 flex justify-center items-center flex-wrap gap-1.5">
                         <button onclick="openTradeModal(${trade.id})" class="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-slate-950 font-bold rounded-lg transition-all text-[10px]">Ver Ficha</button>
-                        <button onclick="deleteTrade(${trade.id})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-all"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                        <button onclick="openTradeModal(${trade.id}); setTimeout(() => toggleEditTradePanel(true), 80);" class="px-2.5 py-1 bg-blue-500/10 hover:bg-blue-500 text-blue-400 hover:text-white font-bold rounded-lg transition-all text-[10px]">Editar</button>
+                        <button onclick="openTradeModal(${trade.id}); setTimeout(() => toggleCloseTradePanel(true), 80);" class="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-bold rounded-lg transition-all text-[10px]">Cerrar</button>
+                        <button onclick="deleteTrade(${trade.id})" class="p-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg transition-all" title="Eliminar"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                     </td>
                 </tr>`;
             });
 
             tbody.innerHTML = html;
-            totalTradesSpan.textContent = state.trades.length.toString();
-            totalRiskSpan.textContent = accumulatedRisk.toFixed(1) + "%";
+            if (totalTradesSpan) totalTradesSpan.textContent = state.trades.length.toString();
+            if (totalRiskSpan) totalRiskSpan.textContent = accumulatedRisk.toFixed(2) + "%";
+            saveTradesToLocal();
+            renderClosedTradesTable();
+            updateMarginAvailabilityUI(state.currentRequiredMargin || 0);
         }
 
-        function openTradeModal(id) {
-            const trade = state.trades.find(t => t.id === id);
-            if (!trade) return;
+        function renderClosedTradesTable() {
+            const tbody = document.getElementById('closed-trades-table-body');
+            const statClosed = document.getElementById('stat-closed-trades');
+            if (!tbody) return;
+            const closedTrades = state.closedTrades || [];
+            if (statClosed) statClosed.textContent = `${closedTrades.length} cerrados`;
+            if (closedTrades.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-500 italic font-semibold">Todavía no hay trades concluidos.</td></tr>`;
+                return;
+            }
 
-            document.getElementById('modal-asset-title').textContent = `${trade.pair} — Posición Registrada`;
-            document.getElementById('modal-timestamp').textContent = `Bitácora: ${trade.timestamp} (ID: ${trade.id})`;
+            let html = "";
+            closedTrades.forEach(trade => {
+                const decimals = getPairDecimals(trade.pair);
+                const result = trade.closeResult || '—';
+                const resultColor = result === 'TP' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10';
+                const pnlValue = Number(trade.realizedPnlValue) || 0;
+                const pnlColor = pnlValue >= 0 ? 'text-emerald-400' : 'text-rose-500';
+                html += `<tr class="hover:bg-slate-900/40 transition-colors">
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px] text-slate-400"><div>${escapeHTML(trade.closedAt || '')}</div><span class="text-[9px] text-slate-600 block">ID: ${trade.id}</span></td>
+                    <td class="p-4 border-b border-slate-900 font-extrabold text-white">${escapeHTML(trade.pair)}</td>
+                    <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${resultColor} font-black">${escapeHTML(result)}</span></td>
+                    <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${Number(trade.lots).toFixed(2)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono ${pnlColor}">${pnlValue >= 0 ? '+' : ''}${formatMoneyValue(pnlValue, trade.accountCurrency || state.accountCurrency)} (${(Number(trade.realizedPercent) || 0).toFixed(2)}%)</td>
+                    <td class="p-4 border-b border-slate-900 text-center"><button onclick="openTradeModal(${trade.id}, true)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold rounded-lg transition-all text-[10px]">Ver Ficha</button></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function openTradeModal(id, forceClosed = false) {
+            const openTrade = (state.trades || []).find(t => t.id === id);
+            const closedTrade = (state.closedTrades || []).find(t => t.id === id);
+            const trade = forceClosed ? closedTrade : (openTrade || closedTrade);
+            if (!trade) return;
+            currentModalTradeId = id;
+            currentModalTradeIsClosed = !openTrade;
+
+            const computed = computeTradeDynamicValues(trade);
+            if (computed && !currentModalTradeIsClosed) applyComputedValuesToTrade(trade, computed);
+            const decimals = getPairDecimals(trade.pair);
+            const rewardPercent = Number(trade.rewardPercent) || (computed ? computed.rewardPercent : 0);
+            const riskPercent = Number(trade.riskPercent) || (computed ? computed.riskPercent : 0);
+
+            document.getElementById('modal-asset-title').textContent = `${trade.pair} — ${currentModalTradeIsClosed ? 'Trade Concluido' : 'Posición Registrada'}`;
+            document.getElementById('modal-timestamp').textContent = currentModalTradeIsClosed
+                ? `Cerrado: ${trade.closedAt || '—'} · Resultado: ${trade.closeResult || '—'} (ID: ${trade.id})`
+                : `Bitácora: ${trade.timestamp} (ID: ${trade.id})`;
             
             const directionIcon = document.getElementById('modal-direction-icon');
             if (trade.direction === 'BUY') {
@@ -1793,24 +2190,130 @@
                 directionIcon.textContent = 'VENTA'; directionIcon.className = "p-2 bg-rose-500/10 text-rose-400 rounded-xl font-black text-xs";
             }
 
-            const symbol = document.getElementById('account-currency-symbol').textContent;
-            document.getElementById('modal-lots').textContent = trade.lots.toFixed(2) + " Lotes";
-            document.getElementById('modal-entry').textContent = trade.entryPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('modal-sl').textContent = trade.stopLossPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('modal-tp').textContent = trade.takeProfitPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('modal-balance').textContent = symbol + trade.balance.toLocaleString(undefined, {minimumFractionDigits: 2});
-            document.getElementById('modal-risk-cash').textContent = trade.riskCash + ` (${trade.riskPercent}%)`;
-            document.getElementById('modal-reward-cash').textContent = trade.rewardCash;
-            document.getElementById('modal-margin').textContent = trade.marginRequired;
+            document.getElementById('modal-lots').textContent = Number(trade.lots).toFixed(2) + " Lotes";
+            document.getElementById('modal-entry').textContent = Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+            document.getElementById('modal-sl').textContent = Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+            document.getElementById('modal-tp').textContent = Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+            document.getElementById('modal-balance').textContent = formatMoneyValue(trade.balance, trade.accountCurrency || state.accountCurrency);
+            document.getElementById('modal-risk-cash').textContent = `${trade.riskCash} (${riskPercent.toFixed(2)}%)`;
+            document.getElementById('modal-reward-cash').textContent = `${trade.rewardCash} (${rewardPercent.toFixed(2)}%)`;
+            document.getElementById('modal-margin').textContent = formatMoneyValue(getTradeMarginValue(trade), trade.accountCurrency || state.accountCurrency);
             document.getElementById('modal-rr').textContent = trade.rrRatio;
 
-            const unitLabel = ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(trade.pair) ? "Puntos" : "Pips";
+            const unitLabel = getUnitLabelForPair(trade.pair);
             document.getElementById('modal-pips-dist').textContent = `${trade.slPips} / ${trade.tpPips} ${unitLabel}`;
+
+            const editSL = document.getElementById('edit-sl-input');
+            const editTP = document.getElementById('edit-tp-input');
+            const closeSL = document.getElementById('close-sl-input');
+            const closeTP = document.getElementById('close-tp-input');
+            if (editSL) editSL.value = Number(trade.stopLossPrice).toFixed(decimals);
+            if (editTP) editTP.value = Number(trade.takeProfitPrice).toFixed(decimals);
+            if (closeSL) closeSL.value = Number(trade.stopLossPrice).toFixed(decimals);
+            if (closeTP) closeTP.value = Number(trade.takeProfitPrice).toFixed(decimals);
+            toggleEditTradePanel(false);
+            toggleCloseTradePanel(false);
+
+            const editBtn = document.getElementById('modal-edit-btn');
+            const closeBtn = document.getElementById('modal-close-trade-btn');
+            if (editBtn) editBtn.classList.toggle('hidden', currentModalTradeIsClosed);
+            if (closeBtn) closeBtn.classList.toggle('hidden', currentModalTradeIsClosed);
 
             const modal = document.getElementById('trade-modal');
             const container = document.getElementById('modal-container');
             modal.classList.remove('hidden');
             setTimeout(() => { container.classList.remove('scale-95', 'opacity-0'); container.classList.add('scale-100', 'opacity-100'); }, 10);
+        }
+
+        function toggleEditTradePanel(show) {
+            const panel = document.getElementById('trade-edit-panel');
+            const closePanel = document.getElementById('trade-close-panel');
+            if (!panel) return;
+            if (show && currentModalTradeIsClosed) return;
+            panel.classList.toggle('hidden', !show);
+            if (show && closePanel) closePanel.classList.add('hidden');
+        }
+
+        function saveTradeEdits() {
+            if (currentModalTradeId === null) return;
+            const trade = (state.trades || []).find(t => t.id === currentModalTradeId);
+            if (!trade) return;
+            const newSL = parseCleanFloat(document.getElementById('edit-sl-input').value);
+            const newTP = parseCleanFloat(document.getElementById('edit-tp-input').value);
+            if (newSL <= 0 || newTP <= 0) {
+                showToast("Ingresa valores válidos para SL y TP.", "error"); return;
+            }
+            const previousSL = trade.stopLossPrice;
+            const previousTP = trade.takeProfitPrice;
+            const computed = computeTradeDynamicValues(trade, { stopLossPrice: newSL, takeProfitPrice: newTP });
+            applyComputedValuesToTrade(trade, computed);
+            trade.modifications = trade.modifications || [];
+            trade.modifications.push({ timestamp: new Date().toLocaleString('es-ES', { hour12: false }), previousSL, previousTP, newSL, newTP, source: 'Edición manual' });
+            saveTradesToLocal();
+            renderTradesTable();
+            openTradeModal(trade.id);
+            showToast("Trade actualizado en tiempo real.", "success");
+        }
+
+        function toggleCloseTradePanel(show) {
+            const panel = document.getElementById('trade-close-panel');
+            const editPanel = document.getElementById('trade-edit-panel');
+            if (!panel) return;
+            if (show && currentModalTradeIsClosed) return;
+            panel.classList.toggle('hidden', !show);
+            if (show && editPanel) editPanel.classList.add('hidden');
+            handlePendingModificationToggle();
+        }
+
+        function handlePendingModificationToggle() {
+            const select = document.getElementById('close-pending-modification');
+            const fields = document.getElementById('close-modification-fields');
+            if (!select || !fields) return;
+            fields.classList.toggle('hidden', select.value !== 'yes');
+        }
+
+        function finalizeCloseTrade() {
+            if (currentModalTradeId === null) return;
+            const idx = (state.trades || []).findIndex(t => t.id === currentModalTradeId);
+            if (idx === -1) return;
+            const trade = state.trades[idx];
+            const pendingModification = document.getElementById('close-pending-modification').value === 'yes';
+            if (pendingModification) {
+                const newSL = parseCleanFloat(document.getElementById('close-sl-input').value);
+                const newTP = parseCleanFloat(document.getElementById('close-tp-input').value);
+                if (newSL <= 0 || newTP <= 0) {
+                    showToast("Ingresa los valores pendientes de SL y TP antes de cerrar.", "error"); return;
+                }
+                const previousSL = trade.stopLossPrice;
+                const previousTP = trade.takeProfitPrice;
+                const computed = computeTradeDynamicValues(trade, { stopLossPrice: newSL, takeProfitPrice: newTP });
+                applyComputedValuesToTrade(trade, computed);
+                trade.modifications = trade.modifications || [];
+                trade.modifications.push({ timestamp: new Date().toLocaleString('es-ES', { hour12: false }), previousSL, previousTP, newSL, newTP, source: 'Ajuste antes del cierre' });
+            }
+
+            const closeResult = document.getElementById('close-result').value;
+            const finalComputed = computeTradeDynamicValues(trade);
+            applyComputedValuesToTrade(trade, finalComputed);
+            const realizedPnlValue = closeResult === 'TP' ? (Number(trade.rewardCashValue) || 0) : -(Number(trade.riskCashValue) || 0);
+            const realizedPercent = (Number(trade.balance) || 0) > 0 ? (realizedPnlValue / Number(trade.balance)) * 100 : 0;
+            const closedTrade = {
+                ...trade,
+                status: 'CLOSED',
+                closeResult,
+                closedAt: new Date().toLocaleString('es-ES', { hour12: false }),
+                realizedPnlValue,
+                realizedPercent,
+                modifiedBeforeClose: pendingModification
+            };
+
+            state.trades.splice(idx, 1);
+            state.closedTrades = state.closedTrades || [];
+            state.closedTrades.unshift(closedTrade);
+            saveTradesToLocal();
+            renderTradesTable();
+            closeModal();
+            showToast(`Trade cerrado: tocó ${closeResult}.`, closeResult === 'TP' ? "success" : "warning");
         }
 
         function closeModal() {
@@ -1851,7 +2354,7 @@
 
         function deleteTrade(id) {
             state.trades = state.trades.filter(t => t.id !== id);
-            localStorage.setItem('oso_master_trades_v5', JSON.stringify(state.trades));
+            saveTradesToLocal();
             renderTradesTable();
             showToast("Registro eliminado de la bitácora", "warning");
         }

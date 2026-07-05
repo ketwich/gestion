@@ -379,6 +379,25 @@
             }
         }
 
+
+        .copy-field-wrap { position: relative; }
+        .copy-field-wrap input { padding-right: 2.35rem !important; }
+        .copy-micro-btn {
+            position: absolute; right: 0.55rem; top: 50%; transform: translateY(-50%);
+            width: 1.45rem; height: 1.45rem; border-radius: 0.55rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #fb7185; background: rgba(244, 63, 94, 0.08);
+            border: 1px solid rgba(244, 63, 94, 0.12);
+            transition: all 0.18s ease; z-index: 5;
+        }
+        .copy-micro-btn:hover {
+            color: #fff; background: rgba(244, 63, 94, 0.28);
+            border-color: rgba(244, 63, 94, 0.35);
+            transform: translateY(-50%) scale(1.04);
+        }
+        .copy-micro-btn:active { transform: translateY(-50%) scale(0.96); }
+        .copy-micro-btn svg { width: 0.85rem; height: 0.85rem; stroke-width: 2.8; }
+
         @keyframes slideRight {
             from { opacity: 0; transform: translateX(-16px); }
             to { opacity: 1; transform: translateX(0); }
@@ -661,13 +680,19 @@
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Entrada</label>
                                     </div>
-                                    <input type="text" id="entry-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                    <div class="copy-field-wrap">
+                                        <input type="text" id="entry-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <button type="button" onclick="copyFieldValue('entry-price', 'Entrada')" class="copy-micro-btn" title="Copiar entrada" aria-label="Copiar entrada"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
+                                    </div>
                                 </div>
                                 <div class="flex flex-col">
                                     <div class="min-h-[24px] flex items-end justify-center mb-1">
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Stop Loss</label>
                                     </div>
-                                    <input type="text" id="stop-loss-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                    <div class="copy-field-wrap">
+                                        <input type="text" id="stop-loss-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <button type="button" onclick="copyFieldValue('stop-loss-price', 'Stop Loss')" class="copy-micro-btn" title="Copiar stop loss" aria-label="Copiar stop loss"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
+                                    </div>
                                 </div>
                                 <div class="flex flex-col">
                                     <div id="benefit-ratio-input-wrapper" class="flex flex-col w-full">
@@ -683,7 +708,10 @@
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
                                             <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Precio TP</label>
                                         </div>
+                                        <div class="copy-field-wrap">
                                         <input type="text" id="tp-price-input" placeholder="0.00" oninput="onTpPriceInputChange();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <button type="button" onclick="copyFieldValue('tp-price-input', 'Precio TP')" class="copy-micro-btn" title="Copiar precio TP" aria-label="Copiar precio TP"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -713,13 +741,19 @@
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
                                             <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Precio TP Proyectado</label>
                                         </div>
+                                        <div class="copy-field-wrap">
                                         <input type="text" id="take-profit-price" value="" readonly class="block w-full px-2 py-2 bg-slate-900/50 border border-slate-850 rounded-xl text-emerald-400 font-black font-mono transition-all focus:outline-none text-center text-xs cursor-not-allowed">
+                                        <button type="button" onclick="copyFieldValue('take-profit-price', 'TP proyectado')" class="copy-micro-btn" title="Copiar TP proyectado" aria-label="Copiar TP proyectado"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
+                                    </div>
                                     </div>
                                     <div id="benefit-price-output-wrapper" class="flex flex-col w-full hidden">
                                         <div class="min-h-[24px] flex items-end justify-center mb-1">
                                             <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Ratio Equivalente</label>
                                         </div>
+                                        <div class="copy-field-wrap">
                                         <input type="text" id="take-profit-rr-mirror" value="" readonly class="block w-full px-2 py-2 bg-slate-900/50 border border-slate-850 rounded-xl text-emerald-400 font-black font-mono transition-all focus:outline-none text-center text-xs cursor-not-allowed">
+                                        <button type="button" onclick="copyFieldValue('take-profit-rr-mirror', 'Ratio equivalente')" class="copy-micro-btn" title="Copiar ratio equivalente" aria-label="Copiar ratio equivalente"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -2447,6 +2481,38 @@
             const container = document.getElementById('modal-container');
             container.classList.remove('scale-100', 'opacity-100'); container.classList.add('scale-95', 'opacity-0');
             setTimeout(() => { modal.classList.add('hidden'); }, 250);
+        }
+
+
+        function copyFieldValue(elementId, label = 'Valor') {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                showToast('No se encontró el campo para copiar.', 'error');
+                return;
+            }
+            const value = (element.value || element.textContent || '').toString().trim();
+            if (!value) {
+                showToast(`${label} está vacío.`, 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(value).then(() => {
+                showToast(`${label} copiado: ${value}`, 'success');
+            }).catch(() => {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = value;
+                tempInput.setAttribute('readonly', '');
+                tempInput.style.position = 'absolute';
+                tempInput.style.left = '-9999px';
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(`${label} copiado: ${value}`, 'success');
+                } catch (err) {
+                    showToast('No se pudo copiar el valor.', 'error');
+                }
+                document.body.removeChild(tempInput);
+            });
         }
 
         function copyLot(elementId) {

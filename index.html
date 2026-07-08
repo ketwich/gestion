@@ -507,7 +507,7 @@
 
             <!-- CONTAINER MAESTRO DE ACCIONES -->
             <div id="unified-card-container" class="w-full max-w-[320px] transition-all duration-500 ease-in-out relative z-10">
-                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col lg:flex-row lg:items-stretch lg:h-[528px] relative">
+                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col lg:flex-row lg:items-stretch lg:min-h-[650px] relative">
                     
                     <!-- SUB-MÓDULO 1: CONFIGURACIÓN DE LA CUENTA (SIEMPRE FIJO A LA IZQUIERDA, 320PX) -->
                     <div class="w-full lg:w-[320px] shrink-0 p-6 bg-slate-950/90 border-r border-slate-900/40 flex flex-col justify-between h-full z-10">
@@ -555,6 +555,52 @@
                                     <option value="500">1:500 (Offshore / Prof.)</option>
                                     <option value="1000">1:1000 (Riesgo Extremo)</option>
                                 </select>
+                            </div>
+
+                            <!-- Limitadores de Flotante y Objetivos de Cuenta -->
+                            <div class="border-t border-slate-900/70 pt-3 space-y-2.5">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div>
+                                        <label class="block text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Flotante máx.</label>
+                                        <div class="relative">
+                                            <input type="text" id="max-floating-percentage" value="3" oninput="updateAccountLimitInputs();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold transition-all text-xs focus:outline-none text-center" placeholder="3">
+                                            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-[8px] font-bold text-slate-500">%</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Pérdida máx.</label>
+                                        <div class="relative">
+                                            <input type="text" id="max-loss-percentage" value="5" oninput="updateAccountLimitInputs();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold transition-all text-xs focus:outline-none text-center" placeholder="5">
+                                            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-[8px] font-bold text-slate-500">%</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Objetivo</label>
+                                        <div class="relative">
+                                            <input type="text" id="growth-target-percentage" value="10" oninput="updateAccountLimitInputs();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl text-white font-extrabold transition-all text-xs focus:outline-none text-center" placeholder="10">
+                                            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-[8px] font-bold text-slate-500">%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-slate-950/70 border border-amber-500/15 rounded-xl p-2 text-center">
+                                        <span class="block text-[7px] font-black text-slate-500 uppercase tracking-widest mb-1">Disponible flotante</span>
+                                        <span id="floating-available-display" class="block text-[10px] font-black text-amber-400 font-mono">3.00%</span>
+                                    </div>
+                                    <div class="bg-slate-950/70 border border-blue-500/15 rounded-xl p-2 text-center">
+                                        <span class="block text-[7px] font-black text-slate-500 uppercase tracking-widest mb-1">Estado lotaje</span>
+                                        <span id="floating-limit-status" class="block text-[10px] font-black text-emerald-400 uppercase tracking-wider">Libre</span>
+                                    </div>
+                                    <div class="bg-slate-950/70 border border-rose-500/15 rounded-xl p-2 text-center">
+                                        <span class="block text-[7px] font-black text-slate-500 uppercase tracking-widest mb-1">Pérdida máx.</span>
+                                        <span id="max-account-loss-display" class="block text-[10px] font-black text-rose-400 font-mono">-$0.00</span>
+                                    </div>
+                                    <div class="bg-slate-950/70 border border-emerald-500/15 rounded-xl p-2 text-center">
+                                        <span class="block text-[7px] font-black text-slate-500 uppercase tracking-widest mb-1">Balance objetivo</span>
+                                        <span id="target-balance-display" class="block text-[10px] font-black text-emerald-400 font-mono">$0.00</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -1280,7 +1326,14 @@
             closedTrades: [],
             currentRequiredMargin: 0,
             currentAvailableMargin: 10000,
-            currentAvailableAfterTrade: 10000
+            currentAvailableAfterTrade: 10000,
+            maxFloatingPercent: 3.0,
+            maxLossPercent: 5.0,
+            growthTargetPercent: 10.0,
+            currentFloatingLimitApplied: false,
+            currentEffectiveRiskPercent: 1.0,
+            currentFloatingAvailablePercent: 3.0,
+            currentFloatingAvailableCash: 300
         };
 
         let previousDirection = null;
@@ -1316,10 +1369,19 @@
                     state.pair = parsed.pair || "XAU/USD";
                     state.benefitMethod = parsed.benefitMethod || "ratio";
                     state.tpPriceInputVal = parsed.tpPriceInputVal || 2380.00;
+                    state.maxFloatingPercent = parsed.maxFloatingPercent ?? 3.0;
+                    state.maxLossPercent = parsed.maxLossPercent ?? 5.0;
+                    state.growthTargetPercent = parsed.growthTargetPercent ?? 10.0;
 
                     document.getElementById('account-balance').value = state.balance;
                     document.getElementById('account-currency').value = state.accountCurrency;
                     document.getElementById('account-leverage').value = state.leverage;
+                    const maxFloatingEl = document.getElementById('max-floating-percentage');
+                    const maxLossEl = document.getElementById('max-loss-percentage');
+                    const growthTargetEl = document.getElementById('growth-target-percentage');
+                    if (maxFloatingEl) maxFloatingEl.value = state.maxFloatingPercent;
+                    if (maxLossEl) maxLossEl.value = state.maxLossPercent;
+                    if (growthTargetEl) growthTargetEl.value = state.growthTargetPercent;
                     document.getElementById('risk-percentage').value = state.riskPercent;
                     document.getElementById('entry-price').value = state.entryPrice;
                     document.getElementById('stop-loss-price').value = state.stopLossPrice;
@@ -1364,7 +1426,7 @@
         });
 
         function setupEventListeners() {
-            const inputs = ['account-balance', 'entry-price', 'stop-loss-price', 'account-leverage', 'risk-percentage', 'risk-reward-ratio'];
+            const inputs = ['account-balance', 'entry-price', 'stop-loss-price', 'account-leverage', 'risk-percentage', 'risk-reward-ratio', 'max-floating-percentage', 'max-loss-percentage', 'growth-target-percentage'];
             inputs.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -1377,6 +1439,9 @@
                         if (id === 'account-leverage') state.leverage = val;
                         if (id === 'risk-percentage') state.riskPercent = val;
                         if (id === 'risk-reward-ratio') state.riskRewardRatio = val;
+                        if (id === 'max-floating-percentage') state.maxFloatingPercent = val;
+                        if (id === 'max-loss-percentage') state.maxLossPercent = val;
+                        if (id === 'growth-target-percentage') state.growthTargetPercent = val;
                         
                         calculateLotSize();
                         saveStateToLocal();
@@ -1396,7 +1461,10 @@
                 riskRewardRatio: state.riskRewardRatio,
                 pair: state.pair,
                 benefitMethod: state.benefitMethod,
-                tpPriceInputVal: state.tpPriceInputVal
+                tpPriceInputVal: state.tpPriceInputVal,
+                maxFloatingPercent: state.maxFloatingPercent,
+                maxLossPercent: state.maxLossPercent,
+                growthTargetPercent: state.growthTargetPercent
             };
             localStorage.setItem('oso_master_config_v5', JSON.stringify(stateToSave));
         }
@@ -1414,6 +1482,19 @@
             calculateLotSize();
             saveStateToLocal();
         }
+
+        function updateAccountLimitInputs() {
+            const maxFloatingEl = document.getElementById('max-floating-percentage');
+            const maxLossEl = document.getElementById('max-loss-percentage');
+            const growthEl = document.getElementById('growth-target-percentage');
+            state.maxFloatingPercent = parseCleanFloat(maxFloatingEl ? maxFloatingEl.value : state.maxFloatingPercent);
+            state.maxLossPercent = parseCleanFloat(maxLossEl ? maxLossEl.value : state.maxLossPercent);
+            state.growthTargetPercent = parseCleanFloat(growthEl ? growthEl.value : state.growthTargetPercent);
+            calculateLotSize();
+            updateAccountObjectivesUI();
+            saveStateToLocal();
+        }
+
 
         function setBenefitMethod(method) {
             const btnRatio = document.getElementById('toggle-use-ratio');
@@ -1900,6 +1981,92 @@
             return `${sign}${Math.abs(numeric).toFixed(2)}%`;
         }
 
+        function getMaxFloatingPercentValue() {
+            const el = document.getElementById('max-floating-percentage');
+            const value = parseCleanFloat(el ? el.value : state.maxFloatingPercent);
+            state.maxFloatingPercent = value;
+            return Math.max(0, value);
+        }
+
+        function getFloatingLimitSnapshot(balance = getCurrentAccountBalanceValue()) {
+            const maxFloatingPercent = getMaxFloatingPercentValue();
+            const impact = getOpenTradesPortfolioImpact();
+            const enabled = maxFloatingPercent > 0;
+            const availablePercent = enabled ? Math.max(0, maxFloatingPercent - impact.riskPercent) : Infinity;
+            const availableCash = enabled ? Math.max(0, balance * (availablePercent / 100)) : Infinity;
+            return {
+                enabled,
+                maxFloatingPercent,
+                openRiskPercent: impact.riskPercent,
+                openRiskCash: impact.totalRiskCash,
+                availablePercent,
+                availableCash
+            };
+        }
+
+        function updateAccountObjectivesUI(impact = null) {
+            const balance = getCurrentAccountBalanceValue();
+            const symbol = getCurrencySymbol(state.accountCurrency);
+            const maxLossEl = document.getElementById('max-loss-percentage');
+            const growthEl = document.getElementById('growth-target-percentage');
+            const maxLossPct = Math.max(0, parseCleanFloat(maxLossEl ? maxLossEl.value : state.maxLossPercent));
+            const growthPct = Math.max(0, parseCleanFloat(growthEl ? growthEl.value : state.growthTargetPercent));
+            state.maxLossPercent = maxLossPct;
+            state.growthTargetPercent = growthPct;
+
+            const maxLossCash = balance * (maxLossPct / 100);
+            const targetProfitCash = balance * (growthPct / 100);
+            const targetBalance = balance + targetProfitCash;
+
+            const lossDisplay = document.getElementById('max-account-loss-display');
+            const targetDisplay = document.getElementById('target-balance-display');
+            if (lossDisplay) lossDisplay.textContent = `-${symbol}${maxLossCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            if (targetDisplay) targetDisplay.textContent = `${symbol}${targetBalance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            const maxFloatingPct = getMaxFloatingPercentValue();
+            const openImpact = impact || getOpenTradesPortfolioImpact();
+            const availablePct = maxFloatingPct > 0 ? Math.max(0, maxFloatingPct - openImpact.riskPercent) : Infinity;
+            state.currentFloatingAvailablePercent = availablePct;
+            state.currentFloatingAvailableCash = maxFloatingPct > 0 ? balance * (availablePct / 100) : Infinity;
+
+            const floatingAvailableEl = document.getElementById('floating-available-display');
+            if (floatingAvailableEl) {
+                if (maxFloatingPct <= 0) {
+                    floatingAvailableEl.textContent = 'Sin límite';
+                    floatingAvailableEl.className = 'block text-[10px] font-black text-slate-300 font-mono';
+                } else {
+                    floatingAvailableEl.textContent = `${availablePct.toFixed(2)}%`;
+                    floatingAvailableEl.className = availablePct <= 0
+                        ? 'block text-[10px] font-black text-rose-400 font-mono'
+                        : availablePct < maxFloatingPct * 0.35
+                            ? 'block text-[10px] font-black text-amber-400 font-mono'
+                            : 'block text-[10px] font-black text-emerald-400 font-mono';
+                }
+            }
+        }
+
+        function updateFloatingLimitStatus(requestedRiskCash = 0, effectiveRiskCash = 0, snapshot = null) {
+            const statusEl = document.getElementById('floating-limit-status');
+            if (!statusEl) return;
+            if (!snapshot || !snapshot.enabled) {
+                statusEl.textContent = 'Libre';
+                statusEl.className = 'block text-[10px] font-black text-emerald-400 uppercase tracking-wider';
+                return;
+            }
+            const capped = requestedRiskCash > effectiveRiskCash + 0.0001;
+            if (snapshot.availablePercent <= 0 || effectiveRiskCash <= 0) {
+                statusEl.textContent = 'Bloqueado';
+                statusEl.className = 'block text-[10px] font-black text-rose-400 uppercase tracking-wider';
+            } else if (capped) {
+                statusEl.textContent = 'Limitado';
+                statusEl.className = 'block text-[10px] font-black text-amber-400 uppercase tracking-wider';
+            } else {
+                statusEl.textContent = 'Libre';
+                statusEl.className = 'block text-[10px] font-black text-emerald-400 uppercase tracking-wider';
+            }
+        }
+
+
         function getOpenTradesPortfolioImpact() {
             const openTrades = state.trades || [];
             const currentBalance = getCurrentAccountBalanceValue();
@@ -1928,6 +2095,7 @@
 
             if (totalRiskSpan) totalRiskSpan.textContent = impact.riskPercent.toFixed(2) + "%";
             if (ifWinSpan) ifWinSpan.textContent = impact.rewardPercent > 0 ? formatSignedPercent(impact.rewardPercent) : "0.00%";
+            updateAccountObjectivesUI(impact);
         }
 
         function updateMarginAvailabilityUI(requiredMargin = state.currentRequiredMargin || 0) {
@@ -2146,7 +2314,15 @@
                 updateResults(0, 0, 0, 0, 0, 0, 0, 0); return;
             }
 
-            const riskCash = balance * (riskPercent / 100);
+            const requestedRiskCash = balance * (riskPercent / 100);
+            const floatingSnapshot = getFloatingLimitSnapshot(balance);
+            const riskCash = floatingSnapshot.enabled ? Math.min(requestedRiskCash, floatingSnapshot.availableCash) : requestedRiskCash;
+            state.currentFloatingLimitApplied = requestedRiskCash > riskCash + 0.0001;
+            state.currentEffectiveRiskPercent = balance > 0 ? (riskCash / balance) * 100 : 0;
+            state.currentFloatingAvailablePercent = floatingSnapshot.availablePercent;
+            state.currentFloatingAvailableCash = floatingSnapshot.availableCash;
+            updateFloatingLimitStatus(requestedRiskCash, riskCash, floatingSnapshot);
+
             let quoteToAccRate = parseFloat(document.getElementById('custom-rate-quote-acc').value);
             if (isNaN(quoteToAccRate)) quoteToAccRate = getCrossRate(pairConfig.quote, state.accountCurrency);
 
@@ -2170,6 +2346,11 @@
 
         function updateResults(lots, riskCash, potentialReward, pipValue, tpPips, requiredMargin, slPips, rrRatio) {
             state.currentRequiredMargin = Number(requiredMargin) || 0;
+            if ((Number(lots) || 0) <= 0 && (Number(riskCash) || 0) <= 0) {
+                state.currentFloatingLimitApplied = false;
+                state.currentEffectiveRiskPercent = 0;
+                updateFloatingLimitStatus(0, 0, null);
+            }
             document.getElementById('lots-standard').textContent = lots.toFixed(2);
             const symbol = document.getElementById('account-currency-symbol').textContent;
             document.getElementById('risk-cash').textContent = `-${symbol}${riskCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -2230,12 +2411,19 @@
         }
 
         function updateMultiRiskTable(baseLots, baseRiskCash) {
-            const currentRiskPercent = state.riskPercent;
+            const effectiveBaseRiskPercent = Number(state.currentEffectiveRiskPercent) || Number(state.riskPercent) || 0;
+            const floatingEnabled = getMaxFloatingPercentValue() > 0;
+            const availableFloatingPercent = Number(state.currentFloatingAvailablePercent);
             const updateItem = (suffix, targetRisk) => {
-                const multiplier = currentRiskPercent > 0 ? (targetRisk / currentRiskPercent) : 0;
-                const calculatedLots = baseLots * multiplier; const calculatedCash = baseRiskCash * multiplier;
+                const effectiveTargetRisk = floatingEnabled && Number.isFinite(availableFloatingPercent)
+                    ? Math.min(targetRisk, Math.max(0, availableFloatingPercent))
+                    : targetRisk;
+                const multiplier = effectiveBaseRiskPercent > 0 ? (effectiveTargetRisk / effectiveBaseRiskPercent) : 0;
+                const calculatedLots = baseLots * multiplier;
+                const calculatedCash = baseRiskCash * multiplier;
                 const symbol = document.getElementById('account-currency-symbol').textContent;
-                document.getElementById(`multi-lots-${suffix}`).textContent = `${calculatedLots.toFixed(2)} ${calculatedLots === 1 ? 'Lote' : 'Lotes'}`;
+                const cappedTxt = effectiveTargetRisk < targetRisk ? ' · lim.' : '';
+                document.getElementById(`multi-lots-${suffix}`).textContent = `${calculatedLots.toFixed(2)} ${calculatedLots === 1 ? 'Lote' : 'Lotes'}${cappedTxt}`;
                 document.getElementById(`multi-cash-${suffix}`).textContent = `-${symbol}${calculatedCash.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             };
             updateItem('05', 0.5); updateItem('10', 1.0); updateItem('15', 2.0); updateItem('20', 5.0);
@@ -2262,13 +2450,14 @@
             const baseToAccountRateValue = getBaseToAccountMultiplier(pairConfig, state.entryPrice);
             const tpPrice = state.benefitMethod === 'ratio' ? parseFloat(document.getElementById('take-profit-price').value) : parseFloat(document.getElementById('tp-price-input').value);
             const rewardCashValue = parseMoneyValue(document.getElementById('reward-cash').textContent);
-            const riskCashValue = parseMoneyValue(document.getElementById('risk-cash').textContent);
+            const riskCashValue = Math.abs(parseMoneyValue(document.getElementById('risk-cash').textContent));
+            const effectiveRiskPercent = state.balance > 0 ? (riskCashValue / state.balance) * 100 : state.riskPercent;
             const rewardPercent = state.balance > 0 ? (rewardCashValue / state.balance) * 100 : 0;
 
             const newTrade = {
                 id: Date.now(), timestamp: new Date().toLocaleString('es-ES', { hour12: false }), status: 'OPEN',
                 pair: state.pair, direction: state.direction, balance: state.balance, accountCurrency: state.accountCurrency, leverage: state.leverage,
-                riskPercent: state.riskPercent, rewardPercent,
+                riskPercent: effectiveRiskPercent, requestedRiskPercent: state.riskPercent, floatingLimitApplied: !!state.currentFloatingLimitApplied, rewardPercent,
                 lots: lots, entryPrice: state.entryPrice, stopLossPrice: state.stopLossPrice, takeProfitPrice: tpPrice,
                 slPips: parseFloat(document.getElementById('calculated-sl-pips').value), tpPips: parseFloat(document.getElementById('calculated-tp-pips').value),
                 riskCash: document.getElementById('risk-cash').textContent, rewardCash: document.getElementById('reward-cash').textContent,

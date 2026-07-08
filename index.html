@@ -281,7 +281,7 @@
         }
         .trades-stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(118px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
             gap: 0.75rem;
             align-items: stretch;
         }
@@ -358,7 +358,7 @@
         }
         @media (min-width: 1024px) {
             .trades-summary-right {
-                max-width: 715px;
+                max-width: 860px;
             }
         }
         @media (max-width: 1023px) {
@@ -982,8 +982,12 @@
                                 <span id="stat-total-trades" class="trades-stat-value text-amber-500">0</span>
                             </div>
                             <div class="trades-stat-card">
-                                <span class="trades-stat-label">Riesgo Acumulado</span>
-                                <span id="stat-total-risk" class="trades-stat-value text-rose-500">0.0%</span>
+                                <span class="trades-stat-label">Cuenta en Riesgo</span>
+                                <span id="stat-total-risk" class="trades-stat-value text-rose-500">0.00%</span>
+                            </div>
+                            <div class="trades-stat-card border-emerald-500/20">
+                                <span class="trades-stat-label">Si Ganan</span>
+                                <span id="stat-balance-if-win-pct" class="trades-stat-value text-emerald-400">0.00%</span>
                             </div>
                             <div class="trades-stat-card border-blue-500/20">
                                 <span class="trades-stat-label">Margen Usado</span>
@@ -1884,6 +1888,48 @@
             }, 0);
         }
 
+        function getCurrentAccountBalanceValue() {
+            const balanceEl = document.getElementById('account-balance');
+            const balance = parseCleanFloat(balanceEl ? balanceEl.value : state.balance);
+            return balance > 0 ? balance : 0;
+        }
+
+        function formatSignedPercent(value) {
+            const numeric = Number(value) || 0;
+            const sign = numeric > 0 ? "+" : (numeric < 0 ? "-" : "");
+            return `${sign}${Math.abs(numeric).toFixed(2)}%`;
+        }
+
+        function getOpenTradesPortfolioImpact() {
+            const openTrades = state.trades || [];
+            const currentBalance = getCurrentAccountBalanceValue();
+            let totalRiskCash = 0;
+            let totalRewardCash = 0;
+
+            openTrades.forEach(trade => {
+                const computed = computeTradeDynamicValues(trade);
+                if (computed) applyComputedValuesToTrade(trade, computed);
+                totalRiskCash += Number(trade.riskCashValue) || 0;
+                totalRewardCash += Number(trade.rewardCashValue) || 0;
+            });
+
+            return {
+                totalRiskCash,
+                totalRewardCash,
+                riskPercent: currentBalance > 0 ? (totalRiskCash / currentBalance) * 100 : 0,
+                rewardPercent: currentBalance > 0 ? (totalRewardCash / currentBalance) * 100 : 0
+            };
+        }
+
+        function updateOpenTradesImpactStats() {
+            const impact = getOpenTradesPortfolioImpact();
+            const totalRiskSpan = document.getElementById('stat-total-risk');
+            const ifWinSpan = document.getElementById('stat-balance-if-win-pct');
+
+            if (totalRiskSpan) totalRiskSpan.textContent = impact.riskPercent.toFixed(2) + "%";
+            if (ifWinSpan) ifWinSpan.textContent = impact.rewardPercent > 0 ? formatSignedPercent(impact.rewardPercent) : "0.00%";
+        }
+
         function updateMarginAvailabilityUI(requiredMargin = state.currentRequiredMargin || 0) {
             const balanceEl = document.getElementById('account-balance');
             const balance = parseCleanFloat(balanceEl ? balanceEl.value : state.balance);
@@ -1936,6 +1982,8 @@
                     scenarioCard.className = "bg-slate-950/80 border border-emerald-500/20 p-2.5 rounded-xl shadow-inner flex flex-col justify-center";
                 }
             }
+
+            updateOpenTradesImpactStats();
         }
 
         function saveTradesToLocal() {
@@ -2241,23 +2289,21 @@
         function renderTradesTable() {
             const tbody = document.getElementById('trades-table-body');
             const totalTradesSpan = document.getElementById('stat-total-trades');
-            const totalRiskSpan = document.getElementById('stat-total-risk');
             if (!tbody) return;
 
             if (!state.trades || state.trades.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="10" class="p-8 text-center text-slate-500 italic font-semibold">No hay operaciones registradas en esta sesión. Prepara un escenario arriba y pulsa "Añadir a bitácora".</td></tr>`;
                 if (totalTradesSpan) totalTradesSpan.textContent = "0";
-                if (totalRiskSpan) totalRiskSpan.textContent = "0.0%";
+                updateOpenTradesImpactStats();
                 renderClosedTradesTable();
                 updateMarginAvailabilityUI(state.currentRequiredMargin || 0);
                 return;
             }
 
-            let html = ""; let accumulatedRisk = 0;
+            let html = "";
             state.trades.forEach(trade => {
                 const computed = computeTradeDynamicValues(trade);
                 if (computed) applyComputedValuesToTrade(trade, computed);
-                accumulatedRisk += Number(trade.riskPercent) || 0;
                 const dirColor = trade.direction === 'BUY' ? 'text-emerald-400' : 'text-rose-400';
                 const dirBg = trade.direction === 'BUY' ? 'bg-emerald-500/10' : 'bg-rose-500/10';
                 const decimals = getPairDecimals(trade.pair);
@@ -2284,7 +2330,7 @@
 
             tbody.innerHTML = html;
             if (totalTradesSpan) totalTradesSpan.textContent = state.trades.length.toString();
-            if (totalRiskSpan) totalRiskSpan.textContent = accumulatedRisk.toFixed(2) + "%";
+            updateOpenTradesImpactStats();
             saveTradesToLocal();
             renderClosedTradesTable();
             updateMarginAvailabilityUI(state.currentRequiredMargin || 0);

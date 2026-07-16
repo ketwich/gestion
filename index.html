@@ -431,6 +431,163 @@
         .animate-watermark-premium {
             animation: pulsePremium 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
+
+
+        /* GESTOR MULTICUENTA */
+        .accounts-manager-shell {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.97), rgba(8, 12, 20, 0.97));
+            border-bottom: 1px solid rgba(245, 158, 11, 0.18);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.18);
+        }
+        .accounts-manager-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.9rem 0 0.75rem;
+        }
+        .accounts-toolbar-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+        .account-action-btn {
+            min-height: 2rem;
+            padding: 0.45rem 0.72rem;
+            border-radius: 0.7rem;
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(15, 23, 42, 0.78);
+            color: #cbd5e1;
+            font-size: 8px;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+        }
+        .account-action-btn:hover {
+            color: #fff;
+            border-color: rgba(245, 158, 11, 0.35);
+            background: rgba(245, 158, 11, 0.11);
+        }
+        .account-action-btn.primary {
+            background: #f59e0b;
+            color: #08101d;
+            border-color: rgba(253, 230, 138, 0.75);
+        }
+        .account-action-btn.primary:hover { background: #fbbf24; color: #020617; }
+        .account-action-btn.danger:hover {
+            color: #fecdd3;
+            border-color: rgba(244, 63, 94, 0.35);
+            background: rgba(244, 63, 94, 0.12);
+        }
+        .account-tabs-scroll {
+            display: flex;
+            align-items: stretch;
+            gap: 0.65rem;
+            overflow-x: auto;
+            padding: 0 0 0.9rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(245, 158, 11, 0.35) transparent;
+            scroll-snap-type: x proximity;
+        }
+        .account-tabs-scroll::-webkit-scrollbar { height: 5px; }
+        .account-tabs-scroll::-webkit-scrollbar-track { background: transparent; }
+        .account-tabs-scroll::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.28); border-radius: 999px; }
+        .account-tab-card {
+            min-width: 210px;
+            max-width: 260px;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            text-align: left;
+            padding: 0.75rem 0.85rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(51, 65, 85, 0.72);
+            background: rgba(2, 6, 23, 0.68);
+            color: #cbd5e1;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .account-tab-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: transparent;
+        }
+        .account-tab-card:hover {
+            transform: translateY(-1px);
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(15, 23, 42, 0.9);
+        }
+        .account-tab-card.active {
+            border-color: rgba(245, 158, 11, 0.52);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(15, 23, 42, 0.96));
+            box-shadow: 0 10px 28px rgba(245, 158, 11, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        .account-tab-card.active::before { background: #f59e0b; }
+        .account-tab-name {
+            display: block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+            line-height: 1.2;
+            font-weight: 900;
+            color: #f8fafc;
+            margin-bottom: 0.45rem;
+        }
+        .account-tab-balance {
+            display: block;
+            font-size: 13px;
+            line-height: 1.1;
+            font-weight: 900;
+            color: #fbbf24;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+        .account-tab-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.45rem;
+            font-size: 7.5px;
+            line-height: 1;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+        }
+        .account-tab-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .account-tab-status-dot {
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 999px;
+            background: #475569;
+        }
+        .account-tab-card.active .account-tab-status-dot { background: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+        @media (max-width: 700px) {
+            .accounts-manager-toolbar { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+            .accounts-toolbar-actions { width: 100%; justify-content: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .account-action-btn { width: 100%; }
+            .account-tab-card { min-width: 185px; }
+        }
+
     </style>
 </head>
 <body class="bg-[#080c14] text-slate-100 min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-200">
@@ -458,11 +615,49 @@
                 <!-- Estado de la Terminal -->
                 <div class="flex items-center space-x-2.5 bg-slate-900/60 border border-slate-800/80 px-4 py-2 rounded-full text-xs font-semibold">
                     <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                    <span class="text-slate-300 font-bold">Oso Master Elite v4.5</span>
+                    <span class="text-slate-300 font-bold">Oso Master Elite v5.0 · Multi-Cuenta</span>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- GESTOR MULTICUENTA -->
+    <section id="accounts-manager" class="accounts-manager-shell relative z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="accounts-manager-toolbar">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0H3a.75.75 0 0 1-.75-.75V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"/></svg>
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.18em]">Gestión simultánea de cuentas</h2>
+                                <span id="accounts-total-badge" class="text-[8px] font-black text-amber-400 bg-amber-500/10 border border-amber-500/15 px-2 py-1 rounded-full">1 CUENTA</span>
+                            </div>
+                            <p class="text-xs text-white font-extrabold truncate mt-1">Activa: <span id="active-account-name-label" class="text-amber-400">Cuenta Principal</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accounts-toolbar-actions">
+                    <button type="button" onclick="createNewAccount()" class="account-action-btn primary" title="Crear una cuenta independiente">
+                        <span class="text-sm leading-none">+</span><span>Nueva cuenta</span>
+                    </button>
+                    <button type="button" onclick="renameActiveAccount()" class="account-action-btn" title="Cambiar el nombre de la cuenta activa">
+                        <span>✎</span><span>Renombrar</span>
+                    </button>
+                    <button type="button" onclick="duplicateActiveAccount()" class="account-action-btn" title="Duplicar configuración y bitácora de la cuenta activa">
+                        <span>⧉</span><span>Duplicar</span>
+                    </button>
+                    <button type="button" onclick="deleteActiveAccount()" class="account-action-btn danger" title="Eliminar la cuenta activa">
+                        <span>×</span><span>Eliminar</span>
+                    </button>
+                </div>
+            </div>
+            <div id="account-tabs" class="account-tabs-scroll" role="tablist" aria-label="Cuentas de trading"></div>
+        </div>
+    </section>
+
 
     <!-- CUERPO DE LA APP -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -516,7 +711,7 @@
                                 <span class="p-1.5 bg-amber-500/10 text-amber-400 rounded-xl">
                                     <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                                 </span>
-                                <h2 class="text-xs font-bold text-white uppercase tracking-wider">Módulo de Cuenta</h2>
+                                <div class="min-w-0"><h2 class="text-xs font-bold text-white uppercase tracking-wider">Módulo de Cuenta</h2><p id="module-active-account-name" class="text-[8px] text-amber-400 font-black uppercase tracking-wider truncate mt-0.5">Cuenta Principal</p></div>
                             </div>
 
                             <!-- Balance de Cuenta -->
@@ -533,7 +728,7 @@
                             <!-- Divisa de la Cuenta -->
                             <div>
                                 <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5">Divisa</label>
-                                <select id="account-currency" onchange="updateCurrencySymbol(); calculateLotSize();" class="block w-full px-3 py-2.5 bg-slate-950 border border-slate-900 hover:border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-semibold transition-all text-xs focus:outline-none">
+                                <select id="account-currency" onchange="updateCurrencySymbol(); calculateLotSize(); saveStateToLocal();" class="block w-full px-3 py-2.5 bg-slate-950 border border-slate-900 hover:border-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-semibold transition-all text-xs focus:outline-none">
                                     <option value="USD" selected>USD - Dólar</option>
                                     <option value="EUR">EUR - Euro</option>
                                     <option value="GBP">GBP - Libra</option>
@@ -855,11 +1050,11 @@
                                 <div class="grid grid-cols-2 gap-3 pt-2">
                                     <div>
                                         <label id="rate-label-1" class="block text-[8px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Tasa del Par</label>
-                                        <input type="text" id="custom-rate-pair" oninput="calculateLotSize()" class="block w-full px-2 py-1.5 text-[10px] bg-slate-900 border border-slate-800 rounded text-white font-mono focus:outline-none">
+                                        <input type="text" id="custom-rate-pair" oninput="calculateLotSize(); saveStateToLocal();" class="block w-full px-2 py-1.5 text-[10px] bg-slate-900 border border-slate-800 rounded text-white font-mono focus:outline-none">
                                     </div>
                                     <div>
                                         <label id="rate-label-2" class="block text-[8px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Conversión Quote/Acc</label>
-                                        <input type="text" id="custom-rate-quote-acc" oninput="calculateLotSize()" class="block w-full px-2 py-1.5 text-[10px] bg-slate-900 border border-slate-800 rounded text-white font-mono focus:outline-none">
+                                        <input type="text" id="custom-rate-quote-acc" oninput="calculateLotSize(); saveStateToLocal();" class="block w-full px-2 py-1.5 text-[10px] bg-slate-900 border border-slate-800 rounded text-white font-mono focus:outline-none">
                                     </div>
                                 </div>
                             </div>
@@ -1016,7 +1211,7 @@
                             📊
                         </span>
                         <div>
-                            <h2 class="text-lg font-black text-white uppercase tracking-wider">Bitácora de Trades en Mercado</h2>
+                            <h2 class="text-lg font-black text-white uppercase tracking-wider">Bitácora de Trades · <span id="trades-active-account-name" class="text-amber-400">Cuenta Principal</span></h2>
                             <p class="text-xs text-slate-400">Gestiona y audita el portafolio de posiciones de tu sesión de trading.</p>
                         </div>
                     </div>
@@ -1310,31 +1505,37 @@
             "CAD": 1.37, "AUD": 1.51, "CHF": 0.89, "NZD": 1.63
         };
 
-        let state = {
-            balance: 10000,
-            accountCurrency: "USD",
-            leverage: 100,
-            riskPercent: 1.0,
-            entryPrice: 2350.00,
-            stopLossPrice: 2340.00,
-            riskRewardRatio: 3.0,
-            direction: null,
-            pair: "XAU/USD",
-            benefitMethod: "ratio",
-            tpPriceInputVal: 2380.00,
-            trades: [],
-            closedTrades: [],
-            currentRequiredMargin: 0,
-            currentAvailableMargin: 10000,
-            currentAvailableAfterTrade: 10000,
-            maxFloatingPercent: 3.0,
-            maxLossPercent: 5.0,
-            growthTargetPercent: 10.0,
-            currentFloatingLimitApplied: false,
-            currentEffectiveRiskPercent: 1.0,
-            currentFloatingAvailablePercent: 3.0,
-            currentFloatingAvailableCash: 300
-        };
+        function createDefaultRuntimeState() {
+            return {
+                balance: 10000,
+                accountCurrency: "USD",
+                leverage: 100,
+                riskPercent: 1.0,
+                entryPrice: 2350.00,
+                stopLossPrice: 2340.00,
+                riskRewardRatio: 3.0,
+                direction: null,
+                pair: "XAU/USD",
+                benefitMethod: "ratio",
+                tpPriceInputVal: 2380.00,
+                trades: [],
+                closedTrades: [],
+                currentRequiredMargin: 0,
+                currentAvailableMargin: 10000,
+                currentAvailableAfterTrade: 10000,
+                maxFloatingPercent: 3.0,
+                maxLossPercent: 5.0,
+                growthTargetPercent: 10.0,
+                currentFloatingLimitApplied: false,
+                currentEffectiveRiskPercent: 1.0,
+                currentFloatingAvailablePercent: 3.0,
+                currentFloatingAvailableCash: 300,
+                manualPairRate: "",
+                manualQuoteAccountRate: ""
+            };
+        }
+
+        let state = createDefaultRuntimeState();
 
         let previousDirection = null;
         let metricsTimeout = null;
@@ -1342,6 +1543,11 @@
         let tradesLogCollapsed = false;
         let currentModalTradeId = null;
         let currentModalTradeIsClosed = false;
+        let collapseUiTimeout = null;
+        let accountTabsRenderFrame = null;
+        let isHydratingAccount = false;
+        const MULTI_ACCOUNT_STORAGE_KEY = 'oso_master_multi_accounts_v1';
+        let accountsStore = { activeAccountId: null, accounts: [] };
 
         function parseCleanFloat(valStr) {
             if (valStr === undefined || valStr === null) return 0;
@@ -1350,79 +1556,390 @@
             return parseFloat(clean) || 0;
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            setupEventListeners();
-            updateCurrencySymbol();
-            updateCustomRateUI();
-            
-            const savedState = localStorage.getItem('oso_master_config_v5');
-            if (savedState) {
-                try {
-                    const parsed = JSON.parse(savedState);
-                    state.balance = parsed.balance || 10000;
-                    state.accountCurrency = parsed.accountCurrency || "USD";
-                    state.leverage = parsed.leverage || 100;
-                    state.riskPercent = parsed.riskPercent || 1.0;
-                    state.entryPrice = parsed.entryPrice || 2350.00;
-                    state.stopLossPrice = parsed.stopLossPrice || 2340.00;
-                    state.riskRewardRatio = parsed.riskRewardRatio || 3.0;
-                    state.pair = parsed.pair || "XAU/USD";
-                    state.benefitMethod = parsed.benefitMethod || "ratio";
-                    state.tpPriceInputVal = parsed.tpPriceInputVal || 2380.00;
-                    state.maxFloatingPercent = parsed.maxFloatingPercent ?? 3.0;
-                    state.maxLossPercent = parsed.maxLossPercent ?? 5.0;
-                    state.growthTargetPercent = parsed.growthTargetPercent ?? 10.0;
 
-                    document.getElementById('account-balance').value = state.balance;
-                    document.getElementById('account-currency').value = state.accountCurrency;
-                    document.getElementById('account-leverage').value = state.leverage;
-                    const maxFloatingEl = document.getElementById('max-floating-percentage');
-                    const maxLossEl = document.getElementById('max-loss-percentage');
-                    const growthTargetEl = document.getElementById('growth-target-percentage');
-                    if (maxFloatingEl) maxFloatingEl.value = state.maxFloatingPercent;
-                    if (maxLossEl) maxLossEl.value = state.maxLossPercent;
-                    if (growthTargetEl) growthTargetEl.value = state.growthTargetPercent;
-                    document.getElementById('risk-percentage').value = state.riskPercent;
-                    document.getElementById('entry-price').value = state.entryPrice;
-                    document.getElementById('stop-loss-price').value = state.stopLossPrice;
-                    document.getElementById('risk-reward-ratio').value = state.riskRewardRatio;
-                    document.getElementById('tp-price-input').value = state.tpPriceInputVal;
-                    document.getElementById('currency-pair').value = state.pair;
+        function generateAccountId() {
+            return `acc_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+        }
 
-                    setBenefitMethod(state.benefitMethod);
-                    updateCurrencySymbol();
-                    updateCustomRateUI();
-                } catch (e) {
-                    console.error("Error al sincronizar parámetros locales", e);
+        function cloneData(value) {
+            return JSON.parse(JSON.stringify(value));
+        }
+
+        function normalizeAccountState(raw = {}) {
+            const defaults = createDefaultRuntimeState();
+            return {
+                ...defaults,
+                ...raw,
+                balance: raw.balance ?? defaults.balance,
+                accountCurrency: raw.accountCurrency || defaults.accountCurrency,
+                leverage: raw.leverage ?? defaults.leverage,
+                riskPercent: raw.riskPercent ?? defaults.riskPercent,
+                entryPrice: raw.entryPrice ?? defaults.entryPrice,
+                stopLossPrice: raw.stopLossPrice ?? defaults.stopLossPrice,
+                riskRewardRatio: raw.riskRewardRatio ?? defaults.riskRewardRatio,
+                direction: ['BUY', 'SELL'].includes(raw.direction) ? raw.direction : null,
+                pair: raw.pair ?? defaults.pair,
+                benefitMethod: raw.benefitMethod === 'price' ? 'price' : 'ratio',
+                tpPriceInputVal: raw.tpPriceInputVal ?? defaults.tpPriceInputVal,
+                maxFloatingPercent: raw.maxFloatingPercent ?? defaults.maxFloatingPercent,
+                maxLossPercent: raw.maxLossPercent ?? defaults.maxLossPercent,
+                growthTargetPercent: raw.growthTargetPercent ?? defaults.growthTargetPercent,
+                trades: Array.isArray(raw.trades) ? raw.trades : [],
+                closedTrades: Array.isArray(raw.closedTrades) ? raw.closedTrades : [],
+                manualPairRate: raw.manualPairRate ?? '',
+                manualQuoteAccountRate: raw.manualQuoteAccountRate ?? ''
+            };
+        }
+
+        function readLegacySingleAccount() {
+            let legacyConfig = {};
+            let legacyTrades = [];
+            let legacyClosedTrades = [];
+            try { legacyConfig = JSON.parse(localStorage.getItem('oso_master_config_v5') || '{}') || {}; } catch (e) {}
+            try { legacyTrades = JSON.parse(localStorage.getItem('oso_master_trades_v5') || '[]') || []; } catch (e) {}
+            try { legacyClosedTrades = JSON.parse(localStorage.getItem('oso_master_closed_trades_v5') || '[]') || []; } catch (e) {}
+            return normalizeAccountState({ ...legacyConfig, trades: legacyTrades, closedTrades: legacyClosedTrades });
+        }
+
+        function persistAccountsStore() {
+            try {
+                localStorage.setItem(MULTI_ACCOUNT_STORAGE_KEY, JSON.stringify(accountsStore));
+            } catch (error) {
+                console.error('No fue posible guardar las cuentas', error);
+                showToast('No se pudieron guardar las cuentas en este navegador.', 'error');
+            }
+        }
+
+        function loadAccountsStore() {
+            let parsed = null;
+            try { parsed = JSON.parse(localStorage.getItem(MULTI_ACCOUNT_STORAGE_KEY) || 'null'); } catch (error) {}
+
+            if (parsed && Array.isArray(parsed.accounts) && parsed.accounts.length) {
+                accountsStore = {
+                    activeAccountId: parsed.activeAccountId,
+                    accounts: parsed.accounts.map((account, index) => ({
+                        id: account.id || generateAccountId(),
+                        name: (account.name || `Cuenta ${index + 1}`).toString().trim().slice(0, 40),
+                        createdAt: account.createdAt || new Date().toISOString(),
+                        updatedAt: account.updatedAt || new Date().toISOString(),
+                        state: normalizeAccountState(account.state || {})
+                    }))
+                };
+                if (!accountsStore.accounts.some(account => account.id === accountsStore.activeAccountId)) {
+                    accountsStore.activeAccountId = accountsStore.accounts[0].id;
                 }
             } else {
-                setInitialPricesForPair("XAU/USD");
+                const firstId = generateAccountId();
+                accountsStore = {
+                    activeAccountId: firstId,
+                    accounts: [{
+                        id: firstId,
+                        name: 'Cuenta Principal',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                        state: readLegacySingleAccount()
+                    }]
+                };
+                persistAccountsStore();
+            }
+        }
+
+        function getActiveAccount() {
+            return accountsStore.accounts.find(account => account.id === accountsStore.activeAccountId) || accountsStore.accounts[0] || null;
+        }
+
+        function getSerializableState() {
+            const manualPair = document.getElementById('custom-rate-pair');
+            const manualQuote = document.getElementById('custom-rate-quote-acc');
+            return normalizeAccountState({
+                balance: state.balance,
+                accountCurrency: state.accountCurrency,
+                leverage: state.leverage,
+                riskPercent: state.riskPercent,
+                entryPrice: state.entryPrice,
+                stopLossPrice: state.stopLossPrice,
+                riskRewardRatio: state.riskRewardRatio,
+                direction: state.direction,
+                pair: state.pair,
+                benefitMethod: state.benefitMethod,
+                tpPriceInputVal: state.tpPriceInputVal,
+                maxFloatingPercent: state.maxFloatingPercent,
+                maxLossPercent: state.maxLossPercent,
+                growthTargetPercent: state.growthTargetPercent,
+                trades: cloneData(state.trades || []),
+                closedTrades: cloneData(state.closedTrades || []),
+                manualPairRate: manualPair ? manualPair.value : (state.manualPairRate || ''),
+                manualQuoteAccountRate: manualQuote ? manualQuote.value : (state.manualQuoteAccountRate || '')
+            });
+        }
+
+        function saveActiveAccountSnapshot({ renderTabs = true } = {}) {
+            if (isHydratingAccount) return;
+            const account = getActiveAccount();
+            if (!account) return;
+            account.state = getSerializableState();
+            account.updatedAt = new Date().toISOString();
+            persistAccountsStore();
+            if (renderTabs) scheduleAccountTabsRender();
+        }
+
+        function formatAccountTabBalance(accountState) {
+            const value = Number(accountState.balance) || 0;
+            const currency = accountState.accountCurrency || 'USD';
+            try {
+                return new Intl.NumberFormat('es-CO', { style: 'currency', currency, maximumFractionDigits: 2 }).format(value);
+            } catch (e) {
+                return `${currency} ${value.toLocaleString('es-CO', { maximumFractionDigits: 2 })}`;
+            }
+        }
+
+        function updateActiveAccountLabels() {
+            const account = getActiveAccount();
+            const name = account ? account.name : 'Sin cuenta';
+            ['active-account-name-label', 'module-active-account-name', 'trades-active-account-name'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = name;
+            });
+            const badge = document.getElementById('accounts-total-badge');
+            if (badge) badge.textContent = `${accountsStore.accounts.length} ${accountsStore.accounts.length === 1 ? 'CUENTA' : 'CUENTAS'}`;
+            document.title = `${name} · Trade Risk Management`;
+        }
+
+        function renderAccountTabs() {
+            const container = document.getElementById('account-tabs');
+            if (!container) return;
+            container.innerHTML = accountsStore.accounts.map(account => {
+                const accountState = normalizeAccountState(account.state || {});
+                const openTrades = accountState.trades.length;
+                const closedTrades = accountState.closedTrades.length;
+                const isActive = account.id === accountsStore.activeAccountId;
+                return `<button type="button" id="account-tab-${account.id}" role="tab" aria-selected="${isActive}" class="account-tab-card ${isActive ? 'active' : ''}" onclick="switchAccount('${account.id}')" ondblclick="renameAccount('${account.id}', event)" title="Cambiar a ${escapeHTML(account.name)} · Doble clic para renombrar">
+                    <span class="account-tab-name">${escapeHTML(account.name)}</span>
+                    <span class="account-tab-balance">${escapeHTML(formatAccountTabBalance(accountState))}</span>
+                    <span class="account-tab-meta">
+                        <span>${openTrades} abiertos · ${closedTrades} cerrados</span>
+                        <span class="account-tab-status"><span class="account-tab-status-dot"></span>${isActive ? 'Activa' : 'Disponible'}</span>
+                    </span>
+                </button>`;
+            }).join('');
+            updateActiveAccountLabels();
+            requestAnimationFrame(() => {
+                const activeTab = document.getElementById(`account-tab-${accountsStore.activeAccountId}`);
+                if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+            });
+        }
+
+        function scheduleAccountTabsRender() {
+            if (accountTabsRenderFrame) cancelAnimationFrame(accountTabsRenderFrame);
+            accountTabsRenderFrame = requestAnimationFrame(() => {
+                accountTabsRenderFrame = null;
+                renderAccountTabs();
+            });
+        }
+
+        function hideTradeFormImmediately() {
+            if (collapseUiTimeout) clearTimeout(collapseUiTimeout);
+            if (metricsTimeout) clearTimeout(metricsTimeout);
+            collapseUiTimeout = null;
+            const btnBuy = document.getElementById('btn-buy');
+            const btnSell = document.getElementById('btn-sell');
+            const detailsWrapper = document.getElementById('trade-details-wrapper');
+            const container = document.getElementById('unified-card-container');
+            const metricsContainer = document.getElementById('metrics-card-container');
+            const watermark = document.getElementById('watermark-placeholder');
+            if (btnBuy) btnBuy.className = "py-2.5 text-[10px] font-black rounded-lg text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:text-white hover:bg-emerald-500/20 transition-all tracking-wider uppercase";
+            if (btnSell) btnSell.className = "py-2.5 text-[10px] font-black rounded-lg text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:text-white hover:bg-rose-500/20 transition-all tracking-wider uppercase";
+            if (detailsWrapper) detailsWrapper.classList.add('hidden');
+            if (metricsContainer) metricsContainer.classList.add('hidden', 'opacity-0', '-translate-y-8');
+            if (container) { container.classList.remove('max-w-7xl'); container.classList.add('max-w-[320px]'); }
+            if (watermark) watermark.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function applyAccountStateToInterface() {
+            const account = getActiveAccount();
+            if (!account) return;
+            isHydratingAccount = true;
+            state = normalizeAccountState(cloneData(account.state || {}));
+
+            currentModalTradeId = null;
+            currentModalTradeIsClosed = false;
+            const modal = document.getElementById('trade-modal');
+            if (modal) modal.classList.add('hidden');
+
+            const values = {
+                'account-balance': state.balance,
+                'account-currency': state.accountCurrency,
+                'account-leverage': state.leverage,
+                'max-floating-percentage': state.maxFloatingPercent,
+                'max-loss-percentage': state.maxLossPercent,
+                'growth-target-percentage': state.growthTargetPercent,
+                'risk-percentage': state.riskPercent,
+                'entry-price': state.entryPrice,
+                'stop-loss-price': state.stopLossPrice,
+                'risk-reward-ratio': state.riskRewardRatio,
+                'tp-price-input': state.tpPriceInputVal,
+                'currency-pair': state.pair,
+                'custom-rate-pair': state.manualPairRate || '',
+                'custom-rate-quote-acc': state.manualQuoteAccountRate || ''
+            };
+            Object.entries(values).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) element.value = value ?? '';
+            });
+
+            const savedDirection = state.direction;
+            const savedScenario = {
+                pair: state.pair,
+                riskPercent: state.riskPercent,
+                entryPrice: state.entryPrice,
+                stopLossPrice: state.stopLossPrice,
+                riskRewardRatio: state.riskRewardRatio,
+                tpPriceInputVal: state.tpPriceInputVal
+            };
+
+            updateCurrencySymbol();
+            updateCustomRateUI();
+            setBenefitMethod(state.benefitMethod);
+
+            if (savedDirection) {
+                setDirection(savedDirection);
+                Object.assign(state, savedScenario, { direction: savedDirection });
+                const restoreValues = {
+                    'currency-pair': state.pair,
+                    'risk-percentage': state.riskPercent,
+                    'entry-price': state.entryPrice,
+                    'stop-loss-price': state.stopLossPrice,
+                    'risk-reward-ratio': state.riskRewardRatio,
+                    'tp-price-input': state.tpPriceInputVal
+                };
+                Object.entries(restoreValues).forEach(([id, value]) => {
+                    const element = document.getElementById(id);
+                    if (element) element.value = value ?? '';
+                });
+            } else {
+                state.direction = null;
+                hideTradeFormImmediately();
             }
 
-            state.direction = null; 
-            collapseTradeForm();
-
-            const savedTrades = localStorage.getItem('oso_master_trades_v5');
-            if (savedTrades) {
-                try {
-                    state.trades = JSON.parse(savedTrades) || [];
-                } catch(e) {
-                    state.trades = [];
-                }
-            }
-
-            const savedClosedTrades = localStorage.getItem('oso_master_closed_trades_v5');
-            if (savedClosedTrades) {
-                try {
-                    state.closedTrades = JSON.parse(savedClosedTrades) || [];
-                } catch(e) {
-                    state.closedTrades = [];
-                }
-            }
             renderTradesTable();
+            renderClosedTradesTable();
+            calculateLotSize();
             setFinancialMetricsCollapsed(false);
             setTradesLogCollapsed(false);
-            calculateLotSize();
+            updateActiveAccountLabels();
+            isHydratingAccount = false;
+            saveActiveAccountSnapshot({ renderTabs: false });
+            renderAccountTabs();
+        }
+
+        function switchAccount(accountId) {
+            if (!accountId || accountId === accountsStore.activeAccountId) return;
+            saveActiveAccountSnapshot({ renderTabs: false });
+            if (!accountsStore.accounts.some(account => account.id === accountId)) return;
+            accountsStore.activeAccountId = accountId;
+            persistAccountsStore();
+            applyAccountStateToInterface();
+            showToast(`Cuenta activa: ${getActiveAccount().name}`, 'success');
+        }
+
+        function normalizeAccountName(name, fallback) {
+            const cleaned = (name || '').toString().replace(/\s+/g, ' ').trim().slice(0, 40);
+            return cleaned || fallback;
+        }
+
+        function createNewAccount() {
+            saveActiveAccountSnapshot({ renderTabs: false });
+            const suggested = `Cuenta ${accountsStore.accounts.length + 1}`;
+            const requested = window.prompt('Nombre para la nueva cuenta:', suggested);
+            if (requested === null) return;
+            const id = generateAccountId();
+            accountsStore.accounts.push({
+                id,
+                name: normalizeAccountName(requested, suggested),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                state: createDefaultRuntimeState()
+            });
+            accountsStore.activeAccountId = id;
+            persistAccountsStore();
+            applyAccountStateToInterface();
+            showToast('Nueva cuenta creada y activada.', 'success');
+        }
+
+        function renameAccount(accountId, event = null) {
+            if (event) event.preventDefault();
+            const account = accountsStore.accounts.find(item => item.id === accountId);
+            if (!account) return;
+            const requested = window.prompt('Nuevo nombre de la cuenta:', account.name);
+            if (requested === null) return;
+            const nextName = normalizeAccountName(requested, account.name);
+            if (nextName === account.name) return;
+            account.name = nextName;
+            account.updatedAt = new Date().toISOString();
+            persistAccountsStore();
+            renderAccountTabs();
+            showToast(`Cuenta renombrada: ${nextName}`, 'success');
+        }
+
+        function renameActiveAccount() {
+            const account = getActiveAccount();
+            if (account) renameAccount(account.id);
+        }
+
+        function duplicateActiveAccount() {
+            saveActiveAccountSnapshot({ renderTabs: false });
+            const source = getActiveAccount();
+            if (!source) return;
+            const id = generateAccountId();
+            const suggested = `${source.name} - Copia`;
+            const requested = window.prompt('Nombre para la cuenta duplicada:', suggested);
+            if (requested === null) return;
+            accountsStore.accounts.push({
+                id,
+                name: normalizeAccountName(requested, suggested),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                state: cloneData(source.state)
+            });
+            accountsStore.activeAccountId = id;
+            persistAccountsStore();
+            applyAccountStateToInterface();
+            showToast('Cuenta duplicada con su configuración y bitácora.', 'success');
+        }
+
+        function deleteActiveAccount() {
+            const account = getActiveAccount();
+            if (!account) return;
+            if (accountsStore.accounts.length <= 1) {
+                showToast('Debe existir al menos una cuenta.', 'warning');
+                return;
+            }
+            const openCount = (account.state.trades || []).length;
+            const closedCount = (account.state.closedTrades || []).length;
+            const confirmed = window.confirm(`¿Eliminar la cuenta "${account.name}"? Se borrarán ${openCount} trade(s) abierto(s) y ${closedCount} concluido(s) de esta cuenta. Esta acción no se puede deshacer.`);
+            if (!confirmed) return;
+            const index = accountsStore.accounts.findIndex(item => item.id === account.id);
+            accountsStore.accounts.splice(index, 1);
+            const nextAccount = accountsStore.accounts[Math.max(0, index - 1)] || accountsStore.accounts[0];
+            accountsStore.activeAccountId = nextAccount.id;
+            persistAccountsStore();
+            applyAccountStateToInterface();
+            showToast(`Cuenta eliminada. Activa: ${nextAccount.name}`, 'warning');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadAccountsStore();
+            applyAccountStateToInterface();
+
+            document.addEventListener('keydown', (event) => {
+                if (!event.altKey || event.ctrlKey || event.metaKey) return;
+                const index = Number(event.key) - 1;
+                if (index >= 0 && index < accountsStore.accounts.length) {
+                    event.preventDefault();
+                    switchAccount(accountsStore.accounts[index].id);
+                }
+            });
         });
 
         function setupEventListeners() {
@@ -1451,22 +1968,7 @@
         }
 
         function saveStateToLocal() {
-            const stateToSave = {
-                balance: state.balance,
-                accountCurrency: state.accountCurrency,
-                leverage: state.leverage,
-                riskPercent: state.riskPercent,
-                entryPrice: state.entryPrice,
-                stopLossPrice: state.stopLossPrice,
-                riskRewardRatio: state.riskRewardRatio,
-                pair: state.pair,
-                benefitMethod: state.benefitMethod,
-                tpPriceInputVal: state.tpPriceInputVal,
-                maxFloatingPercent: state.maxFloatingPercent,
-                maxLossPercent: state.maxLossPercent,
-                growthTargetPercent: state.growthTargetPercent
-            };
-            localStorage.setItem('oso_master_config_v5', JSON.stringify(stateToSave));
+            saveActiveAccountSnapshot();
         }
 
         function setBalance(amount) {
@@ -1610,6 +2112,7 @@
             detailsWrapper.classList.remove('hidden');
             if (watermarkPlaceholder) watermarkPlaceholder.classList.add('opacity-0', 'pointer-events-none');
             if (metricsTimeout) clearTimeout(metricsTimeout);
+            if (collapseUiTimeout) { clearTimeout(collapseUiTimeout); collapseUiTimeout = null; }
 
             container.classList.remove('max-w-[320px]');
             container.classList.add('max-w-7xl');
@@ -1667,6 +2170,7 @@
 
         function collapseTradeForm() {
             if (metricsTimeout) clearTimeout(metricsTimeout);
+            if (collapseUiTimeout) clearTimeout(collapseUiTimeout);
             state.direction = null;
             
             const btnBuy = document.getElementById('btn-buy');
@@ -1685,7 +2189,8 @@
                 metricsContainer.classList.add('opacity-0', '-translate-y-8');
             }
 
-            setTimeout(() => {
+            collapseUiTimeout = setTimeout(() => {
+                collapseUiTimeout = null;
                 if (metricsContainer) {
                     metricsContainer.classList.add('hidden');
                     setFinancialMetricsCollapsed(false);
@@ -2155,8 +2660,7 @@
         }
 
         function saveTradesToLocal() {
-            localStorage.setItem('oso_master_trades_v5', JSON.stringify(state.trades || []));
-            localStorage.setItem('oso_master_closed_trades_v5', JSON.stringify(state.closedTrades || []));
+            saveActiveAccountSnapshot();
         }
 
         function computeTradeDynamicValues(trade, overrides = {}) {
@@ -2816,6 +3320,7 @@
             if (!confirmed) return;
 
             state.closedTrades = [];
+            saveTradesToLocal();
             localStorage.removeItem('oso_master_closed_trades_v5');
 
             if (currentModalTradeIsClosed) {
@@ -2842,6 +3347,7 @@
 
             state.trades = [];
             state.closedTrades = [];
+            saveTradesToLocal();
             currentModalTradeId = null;
             currentModalTradeIsClosed = false;
             localStorage.removeItem('oso_master_trades_v5');

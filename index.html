@@ -871,30 +871,30 @@
                                     <select id="currency-pair" onchange="onPairChange();" class="block w-full px-3 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-bold transition-all focus:outline-none text-xs">
                                         <option value="" disabled selected>Selecciona Activo</option>
                                         <optgroup label="Mayores Forex" class="bg-slate-900 text-slate-300">
-                                            <option value="EUR/USD">EURUSD · 1,14376</option>
-                                            <option value="GBP/USD">GBPUSD · 1,34480</option>
-                                            <option value="USD/CAD">USDCAD · 1,40195</option>
-                                            <option value="USD/CHF">USDCHF · 0,80669</option>
-                                            <option value="NZD/USD">NZDUSD · 0,58385</option>
-                                            <option value="USD/JPY">USDJPY · 162,356</option>
-                                            <option value="AUD/USD">AUDUSD · 0,69787</option>
+                                            <option value="EUR/USD">EURUSD</option>
+                                            <option value="GBP/USD">GBPUSD</option>
+                                            <option value="USD/CAD">USDCAD</option>
+                                            <option value="USD/CHF">USDCHF</option>
+                                            <option value="NZD/USD">NZDUSD</option>
+                                            <option value="USD/JPY">USDJPY</option>
+                                            <option value="AUD/USD">AUDUSD</option>
                                         </optgroup>
                                         <optgroup label="Menores Forex" class="bg-slate-900 text-slate-300">
-                                            <option value="EUR/GBP">EURGBP · 0,85002</option>
-                                            <option value="EUR/JPY">EURJPY · 185,772</option>
-                                            <option value="GBP/JPY">GBPJPY · 218,371</option>
-                                            <option value="EUR/CHF">EURCHF · 0,92229</option>
-                                            <option value="CAD/JPY">CADJPY · 115,794</option>
-                                            <option value="AUD/JPY">AUDJPY · 113,333</option>
+                                            <option value="EUR/GBP">EURGBP</option>
+                                            <option value="EUR/JPY">EURJPY</option>
+                                            <option value="GBP/JPY">GBPJPY</option>
+                                            <option value="EUR/CHF">EURCHF</option>
+                                            <option value="CAD/JPY">CADJPY</option>
+                                            <option value="AUD/JPY">AUDJPY</option>
                                         </optgroup>
                                         <optgroup label="Metales" class="bg-slate-900 text-slate-300">
-                                            <option value="XAU/USD">XAUUSD · 4.017,315</option>
+                                            <option value="XAU/USD">XAUUSD</option>
                                         </optgroup>
                                         <optgroup label="Índices" class="bg-slate-900 text-slate-300">
-                                            <option value="US500">US500 · 7.455,3</option>
-                                            <option value="NAS100">NAS100 · 28.565,6</option>
-                                            <option value="US30">US30 · 52.206,0</option>
-                                            <option value="DXY">DXY · 100,454</option>
+                                            <option value="US500">US500</option>
+                                            <option value="NAS100">NAS100</option>
+                                            <option value="US30">US30</option>
+                                            <option value="DXY">DXY</option>
                                         </optgroup>
                                     </select>
                                     <p id="reference-quote-note" class="mt-1.5 text-[8px] leading-relaxed font-bold text-slate-500">La entrada se precarga con la cotización de la watchlist suministrada.</p>
@@ -1570,6 +1570,7 @@
                 leverage: 100,
                 riskPercent: 1.0,
                 entryPrice: referenceQuotes["XAU/USD"],
+                entryPriceManuallyEdited: false,
                 stopLossPrice: 4016.315,
                 riskRewardRatio: 3.0,
                 direction: null,
@@ -2009,7 +2010,10 @@
                         let cleanVal = e.target.value.toString().replace(',', '.').trim();
                         let val = parseFloat(cleanVal) || 0;
                         if (id === 'account-balance') state.balance = val;
-                        if (id === 'entry-price') state.entryPrice = val;
+                        if (id === 'entry-price') {
+                            state.entryPrice = val;
+                            state.entryPriceManuallyEdited = cleanVal !== '';
+                        }
                         if (id === 'stop-loss-price') state.stopLossPrice = val;
                         if (id === 'account-leverage') state.leverage = val;
                         if (id === 'risk-percentage') state.riskPercent = val;
@@ -2282,7 +2286,7 @@
             document.getElementById('tp-price-input').value = "";
             document.getElementById('currency-pair').value = "";
 
-            state.pair = ""; state.riskPercent = 0; state.entryPrice = 0;
+            state.pair = ""; state.riskPercent = 0; state.entryPrice = 0; state.entryPriceManuallyEdited = false;
             state.stopLossPrice = 0; state.riskRewardRatio = 0;
             state.tpPriceInputVal = 0; state.takeProfit = 0;
 
@@ -2345,13 +2349,10 @@
             const note = document.getElementById('reference-quote-note');
             if (!note) return;
             const normalizedPair = normalizePairSymbol(pair);
-            const quote = referenceQuotes[normalizedPair];
-            const config = currencyPairs[normalizedPair];
-            if (!config || !Number.isFinite(quote)) {
-                note.textContent = 'La entrada se precarga con la cotización de la watchlist suministrada.';
-                return;
-            }
-            note.textContent = `Cotización precargada: ${quote.toLocaleString('es-CO', { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals })} · referencia de la watchlist.`;
+            const hasReference = Number.isFinite(referenceQuotes[normalizedPair]);
+            note.textContent = hasReference
+                ? 'La entrada usa la cotización de referencia solo mientras no hayas escrito un precio manual.'
+                : 'Introduce manualmente el precio de entrada para este instrumento.';
         }
 
         function setInitialPricesForPair(selectedPair) {
@@ -2360,8 +2361,20 @@
             if (!pairConfig) return;
 
             const defaultPrice = referenceQuotes[selectedPair] || 1.0;
+            const entryEl = document.getElementById('entry-price');
+            const slEl = document.getElementById('stop-loss-price');
+            const currentEntryText = entryEl ? entryEl.value.toString().trim() : '';
+            const hasManualEntry = Boolean(state.entryPriceManuallyEdited && currentEntryText !== '');
+
             state.pair = selectedPair;
-            state.entryPrice = defaultPrice;
+
+            // La cotización de referencia solo se usa si el usuario todavía no escribió una entrada.
+            if (!hasManualEntry) {
+                state.entryPrice = defaultPrice;
+                state.entryPriceManuallyEdited = false;
+            } else {
+                state.entryPrice = parseCleanFloat(currentEntryText);
+            }
 
             const decimals = getPairDecimals(selectedPair);
             const slDistance = pairConfig.defaultSL || 20;
@@ -2375,9 +2388,6 @@
             }
 
             state.stopLossPrice = parseFloat(state.stopLossPrice.toFixed(decimals));
-
-            const entryEl = document.getElementById('entry-price');
-            const slEl = document.getElementById('stop-loss-price');
 
             if (entryEl) entryEl.value = state.entryPrice.toFixed(decimals);
             if (slEl) slEl.value = state.stopLossPrice.toFixed(decimals);

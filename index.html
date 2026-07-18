@@ -1488,7 +1488,11 @@
     <!-- LÓGICA DE PROGRAMACIÓN (JAVASCRIPT) -->
     <script>
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-fx-lot-wizard';
+        const PRICE_LOCALE = 'es-CO';
+        const REFERENCE_QUOTES_VERSION = 2;
 
+        // Valores numéricos interpretados desde la watchlist con formato español:
+        // punto = miles y coma = decimales (ej.: 4.017,315 = 4017.315).
         const referenceQuotes = Object.freeze({
             "EUR/USD": 1.14376,
             "GBP/USD": 1.34480,
@@ -1571,6 +1575,7 @@
                 riskPercent: 1.0,
                 entryPrice: referenceQuotes["XAU/USD"],
                 entryPriceManuallyEdited: false,
+                referenceQuotesVersion: REFERENCE_QUOTES_VERSION,
                 stopLossPrice: 4016.315,
                 riskRewardRatio: 3.0,
                 direction: null,
@@ -1608,11 +1613,52 @@
         const MULTI_ACCOUNT_STORAGE_KEY = 'oso_master_multi_accounts_v1';
         let accountsStore = { activeAccountId: null, accounts: [] };
 
-        function parseCleanFloat(valStr) {
-            if (valStr === undefined || valStr === null) return 0;
-            const clean = valStr.toString().replace(',', '.').trim();
-            if (clean === "") return 0;
-            return parseFloat(clean) || 0;
+        function parseCleanFloat(value) {
+            if (value === undefined || value === null) return 0;
+            if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+
+            let clean = value.toString().trim();
+            if (clean === '') return 0;
+
+            // Acepta formato español/colombiano (4.017,315) y formato técnico (4017.315).
+            clean = clean
+                .replace(/\s|\u00A0/g, '')
+                .replace(/[^0-9,.-]/g, '');
+
+            const lastComma = clean.lastIndexOf(',');
+            const lastDot = clean.lastIndexOf('.');
+
+            if (lastComma !== -1 && lastDot !== -1) {
+                if (lastComma > lastDot) {
+                    // Ej.: 4.017,315 -> 4017.315
+                    clean = clean.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // Ej.: 4,017.315 -> 4017.315
+                    clean = clean.replace(/,/g, '');
+                }
+            } else if (lastComma !== -1) {
+                // La coma se interpreta como separador decimal.
+                clean = clean.replace(/,/g, '.');
+            } else if ((clean.match(/\./g) || []).length > 1) {
+                // Varios puntos sin coma: se consideran separadores de miles.
+                clean = clean.replace(/\./g, '');
+            }
+
+            const parsed = Number.parseFloat(clean);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function formatLocalizedPrice(value, pairOrDecimals = state.pair) {
+            const decimals = typeof pairOrDecimals === 'number'
+                ? pairOrDecimals
+                : getPairDecimals(normalizePairSymbol(pairOrDecimals));
+            const numericValue = Number(value);
+            if (!Number.isFinite(numericValue)) return '';
+            return numericValue.toLocaleString(PRICE_LOCALE, {
+                useGrouping: true,
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals
+            });
         }
 
 
@@ -1626,6 +1672,32 @@
 
         function normalizeAccountState(raw = {}) {
             const defaults = createDefaultRuntimeState();
+            const normalizedPair = normalizePairSymbol(raw.pair ?? defaults.pair);
+            const pairConfig = currencyPairs[normalizedPair];
+            const hasCorrectQuoteVersion = Number(raw.referenceQuotesVersion) >= REFERENCE_QUOTES_VERSION;
+            const entryWasManuallyEdited = raw.entryPriceManuallyEdited === true;
+
+            let normalizedEntryPrice = raw.entryPrice ?? defaults.entryPrice;
+            let normalizedStopLossPrice = raw.stopLossPrice ?? defaults.stopLossPrice;
+            let normalizedTpPrice = raw.tpPriceInputVal ?? defaults.tpPriceInputVal;
+
+            // Corrige automáticamente las cotizaciones predeterminadas de versiones anteriores,
+            // sin tocar precios que el usuario haya escrito manualmente.
+            if (!hasCorrectQuoteVersion && !entryWasManuallyEdited && Number.isFinite(referenceQuotes[normalizedPair])) {
+                normalizedEntryPrice = referenceQuotes[normalizedPair];
+                if (pairConfig) {
+                    const direction = ['BUY', 'SELL'].includes(raw.direction) ? raw.direction : 'BUY';
+                    const slDistance = pairConfig.defaultSL || 20;
+                    const slOffset = slDistance * pairConfig.pipSize;
+                    normalizedStopLossPrice = direction === 'SELL'
+                        ? normalizedEntryPrice + slOffset
+                        : normalizedEntryPrice - slOffset;
+                    normalizedTpPrice = direction === 'SELL'
+                        ? normalizedEntryPrice - (slOffset * 3)
+                        : normalizedEntryPrice + (slOffset * 3);
+                }
+            }
+
             return {
                 ...defaults,
                 ...raw,
@@ -1633,13 +1705,15 @@
                 accountCurrency: raw.accountCurrency || defaults.accountCurrency,
                 leverage: raw.leverage ?? defaults.leverage,
                 riskPercent: raw.riskPercent ?? defaults.riskPercent,
-                entryPrice: raw.entryPrice ?? defaults.entryPrice,
-                stopLossPrice: raw.stopLossPrice ?? defaults.stopLossPrice,
+                entryPrice: normalizedEntryPrice,
+                entryPriceManuallyEdited: entryWasManuallyEdited,
+                referenceQuotesVersion: REFERENCE_QUOTES_VERSION,
+                stopLossPrice: normalizedStopLossPrice,
                 riskRewardRatio: raw.riskRewardRatio ?? defaults.riskRewardRatio,
                 direction: ['BUY', 'SELL'].includes(raw.direction) ? raw.direction : null,
-                pair: normalizePairSymbol(raw.pair ?? defaults.pair),
+                pair: normalizedPair,
                 benefitMethod: raw.benefitMethod === 'price' ? 'price' : 'ratio',
-                tpPriceInputVal: raw.tpPriceInputVal ?? defaults.tpPriceInputVal,
+                tpPriceInputVal: normalizedTpPrice,
                 maxFloatingPercent: raw.maxFloatingPercent ?? defaults.maxFloatingPercent,
                 maxLossPercent: raw.maxLossPercent ?? defaults.maxLossPercent,
                 growthTargetPercent: raw.growthTargetPercent ?? defaults.growthTargetPercent,
@@ -1833,10 +1907,10 @@
                 'max-loss-percentage': state.maxLossPercent,
                 'growth-target-percentage': state.growthTargetPercent,
                 'risk-percentage': state.riskPercent,
-                'entry-price': state.entryPrice,
-                'stop-loss-price': state.stopLossPrice,
+                'entry-price': formatLocalizedPrice(state.entryPrice, state.pair),
+                'stop-loss-price': formatLocalizedPrice(state.stopLossPrice, state.pair),
                 'risk-reward-ratio': state.riskRewardRatio,
-                'tp-price-input': state.tpPriceInputVal,
+                'tp-price-input': formatLocalizedPrice(state.tpPriceInputVal, state.pair),
                 'currency-pair': state.pair,
                 'custom-rate-pair': state.manualPairRate || '',
                 'custom-rate-quote-acc': state.manualQuoteAccountRate || ''
@@ -1866,10 +1940,10 @@
                 const restoreValues = {
                     'currency-pair': state.pair,
                     'risk-percentage': state.riskPercent,
-                    'entry-price': state.entryPrice,
-                    'stop-loss-price': state.stopLossPrice,
+                    'entry-price': formatLocalizedPrice(state.entryPrice, state.pair),
+                    'stop-loss-price': formatLocalizedPrice(state.stopLossPrice, state.pair),
                     'risk-reward-ratio': state.riskRewardRatio,
-                    'tp-price-input': state.tpPriceInputVal
+                    'tp-price-input': formatLocalizedPrice(state.tpPriceInputVal, state.pair)
                 };
                 Object.entries(restoreValues).forEach(([id, value]) => {
                     const element = document.getElementById(id);
@@ -2007,8 +2081,8 @@
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', (e) => {
-                        let cleanVal = e.target.value.toString().replace(',', '.').trim();
-                        let val = parseFloat(cleanVal) || 0;
+                        const cleanVal = e.target.value.toString().trim();
+                        const val = parseCleanFloat(cleanVal);
                         if (id === 'account-balance') state.balance = val;
                         if (id === 'entry-price') {
                             state.entryPrice = val;
@@ -2342,7 +2416,7 @@
             
             const decimals = getPairDecimals(state.pair);
             state.stopLossPrice = parseFloat(state.stopLossPrice.toFixed(decimals));
-            document.getElementById('stop-loss-price').value = state.stopLossPrice;
+            document.getElementById('stop-loss-price').value = formatLocalizedPrice(state.stopLossPrice, state.pair);
         }
 
         function updateReferenceQuoteNote(pair) {
@@ -2351,7 +2425,7 @@
             const normalizedPair = normalizePairSymbol(pair);
             const hasReference = Number.isFinite(referenceQuotes[normalizedPair]);
             note.textContent = hasReference
-                ? 'La entrada usa la cotización de referencia solo mientras no hayas escrito un precio manual.'
+                ? 'La entrada usa la cotización de referencia solo mientras no hayas escrito un precio manual. Formato: punto para miles y coma para decimales.'
                 : 'Introduce manualmente el precio de entrada para este instrumento.';
         }
 
@@ -2389,8 +2463,8 @@
 
             state.stopLossPrice = parseFloat(state.stopLossPrice.toFixed(decimals));
 
-            if (entryEl) entryEl.value = state.entryPrice.toFixed(decimals);
-            if (slEl) slEl.value = state.stopLossPrice.toFixed(decimals);
+            if (entryEl) entryEl.value = formatLocalizedPrice(state.entryPrice, decimals);
+            if (slEl) slEl.value = formatLocalizedPrice(state.stopLossPrice, decimals);
 
             state.tpPriceInputVal = effectiveDirection === 'SELL'
                 ? (state.entryPrice - (slDistance * 3 * pipSize))
@@ -2398,7 +2472,7 @@
             state.tpPriceInputVal = parseFloat(state.tpPriceInputVal.toFixed(decimals));
 
             const tpPriceEl = document.getElementById('tp-price-input');
-            if (tpPriceEl) tpPriceEl.value = state.tpPriceInputVal.toFixed(decimals);
+            if (tpPriceEl) tpPriceEl.value = formatLocalizedPrice(state.tpPriceInputVal, decimals);
 
             const step = pairConfig.step || (pairConfig.isJpy ? '0.001' : '0.00001');
             if (entryEl) entryEl.setAttribute('step', step);
@@ -2877,7 +2951,7 @@
                 rrRatio = parseCleanFloat(ratioInput);
                 calculatedTPPips = Math.round((calculatedSLPips * rrRatio) * 10) / 10;
                 takeProfitPriceVal = state.direction === 'BUY' ? (entryPrice + (calculatedTPPips * pipSize)) : (entryPrice - (calculatedTPPips * pipSize));
-                document.getElementById('take-profit-price').value = takeProfitPriceVal.toFixed(decimals);
+                document.getElementById('take-profit-price').value = formatLocalizedPrice(takeProfitPriceVal, decimals);
             } else {
                 const priceInput = document.getElementById('tp-price-input').value.trim();
                 if (priceInput === "") {
@@ -3037,7 +3111,7 @@
             const quoteToAccountRate = isNaN(quoteToAccRateInput) ? getCrossRate(pairConfig.quote, state.accountCurrency) : quoteToAccRateInput;
             const pipValuePerLotValue = pairConfig.contractSize * pairConfig.pipSize * quoteToAccountRate;
             const baseToAccountRateValue = getBaseToAccountMultiplier(pairConfig, state.entryPrice);
-            const tpPrice = state.benefitMethod === 'ratio' ? parseFloat(document.getElementById('take-profit-price').value) : parseFloat(document.getElementById('tp-price-input').value);
+            const tpPrice = state.benefitMethod === 'ratio' ? parseCleanFloat(document.getElementById('take-profit-price').value) : parseCleanFloat(document.getElementById('tp-price-input').value);
             const rewardCashValue = parseMoneyValue(document.getElementById('reward-cash').textContent);
             const riskCashValue = Math.abs(parseMoneyValue(document.getElementById('risk-cash').textContent));
             const effectiveRiskPercent = state.balance > 0 ? (riskCashValue / state.balance) * 100 : state.riskPercent;

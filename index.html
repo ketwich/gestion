@@ -870,24 +870,34 @@
                                     </div>
                                     <select id="currency-pair" onchange="onPairChange();" class="block w-full px-3 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-bold transition-all focus:outline-none text-xs">
                                         <option value="" disabled selected>Selecciona Activo</option>
-                                        <optgroup label="Materias Primas / Commodities" class="bg-slate-900 text-slate-300">
-                                            <option value="XAU/USD">XAU/USD (Oro / Dólar)</option>
+                                        <optgroup label="Mayores Forex" class="bg-slate-900 text-slate-300">
+                                            <option value="EUR/USD">EURUSD · 1,14376</option>
+                                            <option value="GBP/USD">GBPUSD · 1,34480</option>
+                                            <option value="USD/CAD">USDCAD · 1,40195</option>
+                                            <option value="USD/CHF">USDCHF · 0,80669</option>
+                                            <option value="NZD/USD">NZDUSD · 0,58385</option>
+                                            <option value="USD/JPY">USDJPY · 162,356</option>
+                                            <option value="AUD/USD">AUDUSD · 0,69787</option>
                                         </optgroup>
-                                        <optgroup label="Índices Bursátiles" class="bg-slate-900 text-slate-300">
-                                            <option value="SP500">SP500 (S&P 500 Index)</option>
-                                            <option value="NASDAQ">NASDAQ (Nasdaq 100 Index)</option>
-                                            <option value="US30">US30 (Dow Jones 30 Index)</option>
+                                        <optgroup label="Menores Forex" class="bg-slate-900 text-slate-300">
+                                            <option value="EUR/GBP">EURGBP · 0,85002</option>
+                                            <option value="EUR/JPY">EURJPY · 185,772</option>
+                                            <option value="GBP/JPY">GBPJPY · 218,371</option>
+                                            <option value="EUR/CHF">EURCHF · 0,92229</option>
+                                            <option value="CAD/JPY">CADJPY · 115,794</option>
+                                            <option value="AUD/JPY">AUDJPY · 113,333</option>
                                         </optgroup>
-                                        <optgroup label="Pares Mayores Forex" class="bg-slate-900 text-slate-300">
-                                            <option value="EUR/USD">EUR/USD (Euro / Dólar)</option>
-                                            <option value="GBP/USD">GBP/USD (Libra / Dólar)</option>
-                                            <option value="USD/JPY">USD/JPY (Dólar / Yen)</option>
-                                            <option value="USD/CAD">USD/CAD (Dólar / Dólar Can.)</option>
-                                            <option value="USD/CHF">USD/CHF (Dólar / Franco Suizo)</option>
-                                            <option value="AUD/USD">AUD/USD (Dólar Aus. / Dólar)</option>
-                                            <option value="NZD/USD">NZD/USD (Dólar Neozel. / Dólar)</option>
+                                        <optgroup label="Metales" class="bg-slate-900 text-slate-300">
+                                            <option value="XAU/USD">XAUUSD · 4.017,315</option>
+                                        </optgroup>
+                                        <optgroup label="Índices" class="bg-slate-900 text-slate-300">
+                                            <option value="US500">US500 · 7.455,3</option>
+                                            <option value="NAS100">NAS100 · 28.565,6</option>
+                                            <option value="US30">US30 · 52.206,0</option>
+                                            <option value="DXY">DXY · 100,454</option>
                                         </optgroup>
                                     </select>
+                                    <p id="reference-quote-note" class="mt-1.5 text-[8px] leading-relaxed font-bold text-slate-500">La entrada se precarga con la cotización de la watchlist suministrada.</p>
                                 </div>
 
                                 <div>
@@ -1479,30 +1489,78 @@
     <script>
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-fx-lot-wizard';
 
+        const referenceQuotes = Object.freeze({
+            "EUR/USD": 1.14376,
+            "GBP/USD": 1.34480,
+            "USD/CAD": 1.40195,
+            "USD/CHF": 0.80669,
+            "NZD/USD": 0.58385,
+            "USD/JPY": 162.356,
+            "AUD/USD": 0.69787,
+            "EUR/GBP": 0.85002,
+            "EUR/JPY": 185.772,
+            "GBP/JPY": 218.371,
+            "EUR/CHF": 0.92229,
+            "CAD/JPY": 115.794,
+            "AUD/JPY": 113.333,
+            "XAU/USD": 4017.315,
+            "US500": 7455.3,
+            "NAS100": 28565.6,
+            "US30": 52206.0,
+            "DXY": 100.454,
+            // Alias heredados para no romper escenarios guardados en versiones anteriores.
+            "SP500": 7455.3,
+            "NASDAQ": 28565.6
+        });
+
+        const legacyPairAliases = Object.freeze({
+            "SP500": "US500",
+            "NASDAQ": "NAS100"
+        });
+
+        function normalizePairSymbol(pair) {
+            return legacyPairAliases[pair] || pair;
+        }
+
         const currencyPairs = {
-            "XAU/USD": { base: "XAU", quote: "USD", isJpy: false, contractSize: 100, pipSize: 0.1 },
-            "SP500": { base: "SPX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
-            "NASDAQ": { base: "NDX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
-            "US30": { base: "DJX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0 },
-            "EUR/USD": { base: "EUR", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "GBP/USD": { base: "GBP", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "USD/JPY": { base: "USD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
-            "USD/CAD": { base: "USD", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "USD/CHF": { base: "USD", quote: "CHF", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "AUD/USD": { base: "AUD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "NZD/USD": { base: "NZD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "EUR/GBP": { base: "EUR", quote: "GBP", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "EUR/JPY": { base: "EUR", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
-            "GBP/JPY": { base: "GBP", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
-            "AUD/JPY": { base: "AUD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 },
-            "EUR/CAD": { base: "EUR", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "GBP/CAD": { base: "GBP", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001 },
-            "CHF/JPY": { base: "CHF", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01 }
+            "XAU/USD": { base: "XAU", quote: "USD", isJpy: false, contractSize: 100, pipSize: 0.1, decimals: 3, defaultSL: 10, step: "0.001", unitLabel: "Puntos", synthetic: true },
+            "US500": { base: "SPX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0, decimals: 1, defaultSL: 50, step: "0.1", unitLabel: "Puntos", synthetic: true },
+            "NAS100": { base: "NDX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0, decimals: 1, defaultSL: 50, step: "0.1", unitLabel: "Puntos", synthetic: true },
+            "US30": { base: "DJX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0, decimals: 1, defaultSL: 50, step: "0.1", unitLabel: "Puntos", synthetic: true },
+            "DXY": { base: "DXY", quote: "USD", isJpy: false, contractSize: 1000, pipSize: 0.001, decimals: 3, defaultSL: 100, step: "0.001", unitLabel: "Puntos", synthetic: true },
+
+            "EUR/USD": { base: "EUR", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "GBP/USD": { base: "GBP", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "USD/CAD": { base: "USD", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "USD/CHF": { base: "USD", quote: "CHF", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "NZD/USD": { base: "NZD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "USD/JPY": { base: "USD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" },
+            "AUD/USD": { base: "AUD", quote: "USD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+
+            "EUR/GBP": { base: "EUR", quote: "GBP", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "EUR/JPY": { base: "EUR", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" },
+            "GBP/JPY": { base: "GBP", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" },
+            "EUR/CHF": { base: "EUR", quote: "CHF", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "CAD/JPY": { base: "CAD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" },
+            "AUD/JPY": { base: "AUD", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" },
+
+            // Instrumentos heredados: se conservan para abrir operaciones antiguas guardadas.
+            "SP500": { base: "SPX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0, decimals: 1, defaultSL: 50, step: "0.1", unitLabel: "Puntos", synthetic: true },
+            "NASDAQ": { base: "NDX", quote: "USD", isJpy: false, contractSize: 1, pipSize: 1.0, decimals: 1, defaultSL: 50, step: "0.1", unitLabel: "Puntos", synthetic: true },
+            "EUR/CAD": { base: "EUR", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "GBP/CAD": { base: "GBP", quote: "CAD", isJpy: false, contractSize: 100000, pipSize: 0.0001, decimals: 5, defaultSL: 20, step: "0.00001", unitLabel: "Pips" },
+            "CHF/JPY": { base: "CHF", quote: "JPY", isJpy: true, contractSize: 100000, pipSize: 0.01, decimals: 3, defaultSL: 20, step: "0.001", unitLabel: "Pips" }
         };
 
         let rates = {
-            "USD": 1.0, "EUR": 0.92, "GBP": 0.79, "JPY": 154.5,
-            "CAD": 1.37, "AUD": 1.51, "CHF": 0.89, "NZD": 1.63
+            "USD": 1.0,
+            "EUR": 0.8743092957,
+            "GBP": 0.7436049970,
+            "JPY": 162.356,
+            "CAD": 1.40195,
+            "AUD": 1.4329316348,
+            "CHF": 0.80669,
+            "NZD": 1.7127686906
         };
 
         function createDefaultRuntimeState() {
@@ -1511,13 +1569,13 @@
                 accountCurrency: "USD",
                 leverage: 100,
                 riskPercent: 1.0,
-                entryPrice: 2350.00,
-                stopLossPrice: 2340.00,
+                entryPrice: referenceQuotes["XAU/USD"],
+                stopLossPrice: 4016.315,
                 riskRewardRatio: 3.0,
                 direction: null,
                 pair: "XAU/USD",
                 benefitMethod: "ratio",
-                tpPriceInputVal: 2380.00,
+                tpPriceInputVal: 4020.315,
                 trades: [],
                 closedTrades: [],
                 currentRequiredMargin: 0,
@@ -1578,7 +1636,7 @@
                 stopLossPrice: raw.stopLossPrice ?? defaults.stopLossPrice,
                 riskRewardRatio: raw.riskRewardRatio ?? defaults.riskRewardRatio,
                 direction: ['BUY', 'SELL'].includes(raw.direction) ? raw.direction : null,
-                pair: raw.pair ?? defaults.pair,
+                pair: normalizePairSymbol(raw.pair ?? defaults.pair),
                 benefitMethod: raw.benefitMethod === 'price' ? 'price' : 'ratio',
                 tpPriceInputVal: raw.tpPriceInputVal ?? defaults.tpPriceInputVal,
                 maxFloatingPercent: raw.maxFloatingPercent ?? defaults.maxFloatingPercent,
@@ -2278,59 +2336,71 @@
                 state.stopLossPrice = state.entryPrice + (currentPips * pipSize);
             }
             
-            const decimals = pairConfig.isJpy ? 3 : (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(state.pair) ? 2 : 5);
+            const decimals = getPairDecimals(state.pair);
             state.stopLossPrice = parseFloat(state.stopLossPrice.toFixed(decimals));
             document.getElementById('stop-loss-price').value = state.stopLossPrice;
         }
 
+        function updateReferenceQuoteNote(pair) {
+            const note = document.getElementById('reference-quote-note');
+            if (!note) return;
+            const normalizedPair = normalizePairSymbol(pair);
+            const quote = referenceQuotes[normalizedPair];
+            const config = currencyPairs[normalizedPair];
+            if (!config || !Number.isFinite(quote)) {
+                note.textContent = 'La entrada se precarga con la cotización de la watchlist suministrada.';
+                return;
+            }
+            note.textContent = `Cotización precargada: ${quote.toLocaleString('es-CO', { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals })} · referencia de la watchlist.`;
+        }
+
         function setInitialPricesForPair(selectedPair) {
+            selectedPair = normalizePairSymbol(selectedPair);
             const pairConfig = currencyPairs[selectedPair];
             if (!pairConfig) return;
-            
-            const baselinePrices = {
-                "XAU/USD": 2350.00, "SP500": 5300.00, "NASDAQ": 18500.00, "US30": 39000.00,
-                "EUR/USD": 1.08500, "GBP/USD": 1.26500, "USD/JPY": 155.00, "USD/CAD": 1.36500,
-                "USD/CHF": 0.90500, "AUD/USD": 0.66500, "NZD/USD": 0.61500, "EUR/GBP": 0.85500,
-                "EUR/JPY": 168.00, "GBP/JPY": 196.00, "AUD/JPY": 103.00, "EUR/CAD": 1.48000,
-                "GBP/CAD": 1.72500, "CHF/JPY": 171.00
-            };
 
-            const defaultPrice = baselinePrices[selectedPair] || 1.0;
+            const defaultPrice = referenceQuotes[selectedPair] || 1.0;
+            state.pair = selectedPair;
             state.entryPrice = defaultPrice;
-            
-            const decimals = pairConfig.isJpy ? 3 : (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(selectedPair) ? 2 : 5);
-            const slDistance = ["SP500", "NASDAQ", "US30"].includes(selectedPair) ? 50 : (selectedPair === "XAU/USD" ? 10 : 20);
+
+            const decimals = getPairDecimals(selectedPair);
+            const slDistance = pairConfig.defaultSL || 20;
             const pipSize = pairConfig.pipSize;
-            
+
             const effectiveDirection = state.direction || 'BUY';
             if (effectiveDirection === 'BUY') {
                 state.stopLossPrice = state.entryPrice - (slDistance * pipSize);
             } else {
                 state.stopLossPrice = state.entryPrice + (slDistance * pipSize);
             }
-            
+
             state.stopLossPrice = parseFloat(state.stopLossPrice.toFixed(decimals));
-            
+
             const entryEl = document.getElementById('entry-price');
             const slEl = document.getElementById('stop-loss-price');
-            
-            if (entryEl) entryEl.value = state.entryPrice;
-            if (slEl) slEl.value = state.stopLossPrice;
 
-            state.tpPriceInputVal = effectiveDirection === 'SELL' ? (state.entryPrice - (slDistance * 3 * pipSize)) : (state.entryPrice + (slDistance * 3 * pipSize));
+            if (entryEl) entryEl.value = state.entryPrice.toFixed(decimals);
+            if (slEl) slEl.value = state.stopLossPrice.toFixed(decimals);
+
+            state.tpPriceInputVal = effectiveDirection === 'SELL'
+                ? (state.entryPrice - (slDistance * 3 * pipSize))
+                : (state.entryPrice + (slDistance * 3 * pipSize));
             state.tpPriceInputVal = parseFloat(state.tpPriceInputVal.toFixed(decimals));
-            
-            const tpPriceEl = document.getElementById('tp-price-input');
-            if (tpPriceEl) tpPriceEl.value = state.tpPriceInputVal;
 
-            const step = ["SP500", "NASDAQ", "US30"].includes(selectedPair) ? "1" : (selectedPair === "XAU/USD" ? "0.01" : "0.00001");
-            if (entryEl) entryEl.setAttribute("step", step);
-            if (slEl) slEl.setAttribute("step", step);
+            const tpPriceEl = document.getElementById('tp-price-input');
+            if (tpPriceEl) tpPriceEl.value = state.tpPriceInputVal.toFixed(decimals);
+
+            const step = pairConfig.step || (pairConfig.isJpy ? '0.001' : '0.00001');
+            if (entryEl) entryEl.setAttribute('step', step);
+            if (slEl) slEl.setAttribute('step', step);
+            if (tpPriceEl) tpPriceEl.setAttribute('step', step);
+
+            updateReferenceQuoteNote(selectedPair);
         }
 
         function onPairChange() {
             restoreScenarioCoreDefaults();
-            state.pair = document.getElementById('currency-pair').value;
+            state.pair = normalizePairSymbol(document.getElementById('currency-pair').value);
             if (!state.pair || !currencyPairs[state.pair]) {
                 calculateLotSize(); saveStateToLocal(); return;
             }
@@ -2363,7 +2433,7 @@
 
         function updateCustomRateUI() {
             const pairSelect = document.getElementById('currency-pair');
-            state.pair = pairSelect ? pairSelect.value : state.pair;
+            state.pair = normalizePairSymbol(pairSelect ? pairSelect.value : state.pair);
             const pairConfig = currencyPairs[state.pair];
             if (!pairConfig) {
                 const rateLabel1 = document.getElementById('rate-label-1');
@@ -2374,18 +2444,22 @@
                 if (rateLabel2) rateLabel2.textContent = 'Conversión Quote/Acc';
                 if (customRateEl) customRateEl.value = '';
                 if (customQuoteAccEl) customQuoteAccEl.value = '';
+                updateReferenceQuoteNote('');
                 return;
             }
 
             const rateLabel1 = document.getElementById('rate-label-1');
             if (rateLabel1) rateLabel1.textContent = `Tasa del Par (${state.pair})`;
-            
-            let currentPairRate = 1.0;
-            const bRate = rates[pairConfig.base]; const qRate = rates[pairConfig.quote];
-            if (bRate && qRate) currentPairRate = qRate / bRate;
-            
+
+            let currentPairRate = referenceQuotes[state.pair];
+            const bRate = rates[pairConfig.base];
+            const qRate = rates[pairConfig.quote];
+            if (!Number.isFinite(currentPairRate)) {
+                currentPairRate = (bRate && qRate) ? (qRate / bRate) : 1.0;
+            }
+
             const customRateEl = document.getElementById('custom-rate-pair');
-            if (customRateEl) customRateEl.value = currentPairRate.toFixed(5);
+            if (customRateEl) customRateEl.value = currentPairRate.toFixed(getPairDecimals(state.pair));
 
             const rateLabel2 = document.getElementById('rate-label-2');
             if (rateLabel2) rateLabel2.textContent = `Conversión (${pairConfig.quote} ➔ ${state.accountCurrency})`;
@@ -2397,6 +2471,7 @@
             }
             const customQuoteAccEl = document.getElementById('custom-rate-quote-acc');
             if (customQuoteAccEl) customQuoteAccEl.value = quoteToAccRate.toFixed(5);
+            updateReferenceQuoteNote(state.pair);
         }
 
         function getCrossRate(fromCur, toCur) {
@@ -2406,7 +2481,7 @@
 
         function getBaseToAccountMultiplier(pairConfig, entryPrice) {
             if (pairConfig.base === state.accountCurrency) return 1.0;
-            if (["XAU", "SPX", "NDX", "DJX"].includes(pairConfig.base)) {
+            if (pairConfig.synthetic || ["XAU", "SPX", "NDX", "DJX", "DXY"].includes(pairConfig.base)) {
                 return entryPrice * getCrossRate("USD", state.accountCurrency);
             }
             return getCrossRate(pairConfig.base, state.accountCurrency);
@@ -2454,13 +2529,14 @@
         }
 
         function getPairDecimals(pair) {
-            const pairConfig = currencyPairs[pair];
+            const pairConfig = currencyPairs[normalizePairSymbol(pair)];
             if (!pairConfig) return 2;
-            return (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(pair)) ? 2 : (pairConfig.isJpy ? 3 : 5);
+            return Number.isInteger(pairConfig.decimals) ? pairConfig.decimals : (pairConfig.isJpy ? 3 : 5);
         }
 
         function getUnitLabelForPair(pair) {
-            return ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(pair) ? "Puntos" : "Pips";
+            const pairConfig = currencyPairs[normalizePairSymbol(pair)];
+            return pairConfig?.unitLabel || "Pips";
         }
 
         function getTradeMarginValue(trade) {
@@ -2764,9 +2840,8 @@
 
             const pipSize = pairConfig.pipSize;
             const multiplier = 1 / pipSize;
-            const decimals = (["XAU/USD", "SP500", "NASDAQ", "US30"].includes(state.pair)) ? 2 : (pairConfig.isJpy ? 3 : 5);
-            const isIndexOrGold = ["XAU/USD", "SP500", "NASDAQ", "US30"].includes(state.pair);
-            const unitLabel = isIndexOrGold ? "PUNTOS" : "PIPS";
+            const decimals = getPairDecimals(state.pair);
+            const unitLabel = getUnitLabelForPair(state.pair).toUpperCase();
 
             document.getElementById('sl-unit').textContent = unitLabel;
             document.getElementById('tp-unit').textContent = unitLabel;

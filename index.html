@@ -932,7 +932,7 @@
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Entrada</label>
                                     </div>
                                     <div class="copy-field-wrap">
-                                        <input type="text" id="entry-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <input type="text" id="entry-price" placeholder="0,00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                         <button type="button" onclick="copyFieldValue('entry-price', 'Entrada')" class="copy-micro-btn" title="Copiar entrada" aria-label="Copiar entrada"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
                                     </div>
                                 </div>
@@ -941,7 +941,7 @@
                                         <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Stop Loss</label>
                                     </div>
                                     <div class="copy-field-wrap">
-                                        <input type="text" id="stop-loss-price" placeholder="0.00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <input type="text" id="stop-loss-price" placeholder="0,00" oninput="calculateLotSize();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-850 hover:border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                         <button type="button" onclick="copyFieldValue('stop-loss-price', 'Stop Loss')" class="copy-micro-btn" title="Copiar stop loss" aria-label="Copiar stop loss"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
                                     </div>
                                 </div>
@@ -960,7 +960,7 @@
                                             <label class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider text-center">Precio TP</label>
                                         </div>
                                         <div class="copy-field-wrap">
-                                        <input type="text" id="tp-price-input" placeholder="0.00" oninput="onTpPriceInputChange();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
+                                        <input type="text" id="tp-price-input" placeholder="0,00" oninput="onTpPriceInputChange();" class="block w-full px-2 py-2 bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl text-white font-extrabold font-mono transition-all focus:outline-none text-center text-xs">
                                         <button type="button" onclick="copyFieldValue('tp-price-input', 'Precio TP')" class="copy-micro-btn" title="Copiar precio TP" aria-label="Copiar precio TP"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 4h8a2 2 0 0 1 2 2v9"/></svg></button>
                                     </div>
                                     </div>
@@ -1491,8 +1491,8 @@
         const PRICE_LOCALE = 'es-CO';
         const REFERENCE_QUOTES_VERSION = 2;
 
-        // Valores numéricos interpretados desde la watchlist con formato español:
-        // punto = miles y coma = decimales (ej.: 4.017,315 = 4017.315).
+        // Valores numéricos internos de la watchlist. En pantalla, los precios se muestran
+        // sin separadores de miles y con coma decimal (ej.: 4017,315).
         const referenceQuotes = Object.freeze({
             "EUR/USD": 1.14376,
             "GBP/USD": 1.34480,
@@ -1620,7 +1620,8 @@
             let clean = value.toString().trim();
             if (clean === '') return 0;
 
-            // Acepta formato español/colombiano (4.017,315) y formato técnico (4017.315).
+            // Acepta el formato preferido sin miles y con coma decimal (4017,315),
+            // además de formatos heredados como 4.017,315 o el técnico 4017.315.
             clean = clean
                 .replace(/\s|\u00A0/g, '')
                 .replace(/[^0-9,.-]/g, '');
@@ -1655,7 +1656,7 @@
             const numericValue = Number(value);
             if (!Number.isFinite(numericValue)) return '';
             return numericValue.toLocaleString(PRICE_LOCALE, {
-                useGrouping: true,
+                useGrouping: false,
                 minimumFractionDigits: decimals,
                 maximumFractionDigits: decimals
             });
@@ -3166,9 +3167,9 @@
                     <td class="p-4 border-b border-slate-900 font-extrabold text-white">${escapeHTML(trade.pair)}</td>
                     <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${dirBg} ${dirColor} font-black">${escapeHTML(trade.direction)}</span></td>
                     <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${Number(trade.lots).toFixed(2)}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${formatLocalizedPrice(trade.entryPrice, decimals)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${formatLocalizedPrice(trade.stopLossPrice, decimals)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${formatLocalizedPrice(trade.takeProfitPrice, decimals)}</td>
                     <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${escapeHTML(trade.riskCash)} (${(Number(trade.riskPercent) || 0).toFixed(2)}%)</td>
                     <td class="p-4 border-b border-slate-900 text-right font-mono text-blue-400">${formatMoneyValue(getTradeMarginValue(trade), trade.accountCurrency || state.accountCurrency)}</td>
                     <td class="p-4 border-b border-slate-900 text-center space-x-1.5 flex justify-center items-center flex-wrap gap-1.5">
@@ -3211,9 +3212,9 @@
                     <td class="p-4 border-b border-slate-900 font-extrabold text-white">${escapeHTML(trade.pair)}</td>
                     <td class="p-4 border-b border-slate-900 font-mono text-[10px]"><span class="px-2 py-1 rounded-md ${resultColor} font-black">${escapeHTML(result)}</span></td>
                     <td class="p-4 border-b border-slate-900 text-right font-black font-mono text-amber-500">${Number(trade.lots).toFixed(2)}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
-                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals})}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-slate-300">${formatLocalizedPrice(trade.entryPrice, decimals)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-rose-500">${formatLocalizedPrice(trade.stopLossPrice, decimals)}</td>
+                    <td class="p-4 border-b border-slate-900 text-right font-mono text-emerald-400">${formatLocalizedPrice(trade.takeProfitPrice, decimals)}</td>
                     <td class="p-4 border-b border-slate-900 text-right font-mono ${pnlColor}">${pnlValue >= 0 ? '+' : ''}${formatMoneyValue(pnlValue, trade.accountCurrency || state.accountCurrency)} (${(Number(trade.realizedPercent) || 0).toFixed(2)}%)</td>
                     <td class="p-4 border-b border-slate-900 text-center"><div class="inline-flex items-center justify-center gap-2"><button onclick="openTradeModal(${trade.id}, true)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold rounded-lg transition-all text-[10px]">Ver Ficha</button>
                                             <button type="button" onclick="deleteClosedTrade(${trade.id})" class="concluded-delete-btn" title="Eliminar trade concluido" aria-label="Eliminar trade concluido"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166M19.228 5.79 18.16 19.673A2.25 2.25 0 0 1 15.916 21.75H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397M4.772 5.79c.342-.052.682-.107 1.022-.166m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.364 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg></button></div></td>
@@ -3249,9 +3250,9 @@
             }
 
             document.getElementById('modal-lots').textContent = Number(trade.lots).toFixed(2) + " Lotes";
-            document.getElementById('modal-entry').textContent = Number(trade.entryPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
-            document.getElementById('modal-sl').textContent = Number(trade.stopLossPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
-            document.getElementById('modal-tp').textContent = Number(trade.takeProfitPrice).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+            document.getElementById('modal-entry').textContent = formatLocalizedPrice(trade.entryPrice, decimals);
+            document.getElementById('modal-sl').textContent = formatLocalizedPrice(trade.stopLossPrice, decimals);
+            document.getElementById('modal-tp').textContent = formatLocalizedPrice(trade.takeProfitPrice, decimals);
             document.getElementById('modal-balance').textContent = formatMoneyValue(trade.balance, trade.accountCurrency || state.accountCurrency);
             document.getElementById('modal-risk-cash').textContent = `${trade.riskCash} (${riskPercent.toFixed(2)}%)`;
             document.getElementById('modal-reward-cash').textContent = `${trade.rewardCash} (${rewardPercent.toFixed(2)}%)`;
@@ -3265,10 +3266,10 @@
             const editTP = document.getElementById('edit-tp-input');
             const closeSL = document.getElementById('close-sl-input');
             const closeTP = document.getElementById('close-tp-input');
-            if (editSL) editSL.value = Number(trade.stopLossPrice).toFixed(decimals);
-            if (editTP) editTP.value = Number(trade.takeProfitPrice).toFixed(decimals);
-            if (closeSL) closeSL.value = Number(trade.stopLossPrice).toFixed(decimals);
-            if (closeTP) closeTP.value = Number(trade.takeProfitPrice).toFixed(decimals);
+            if (editSL) editSL.value = formatLocalizedPrice(trade.stopLossPrice, decimals);
+            if (editTP) editTP.value = formatLocalizedPrice(trade.takeProfitPrice, decimals);
+            if (closeSL) closeSL.value = formatLocalizedPrice(trade.stopLossPrice, decimals);
+            if (closeTP) closeTP.value = formatLocalizedPrice(trade.takeProfitPrice, decimals);
             toggleEditTradePanel(false);
             toggleCloseTradePanel(false);
 
